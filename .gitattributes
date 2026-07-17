@@ -7,3 +7,5 @@
 *.raw binary
 *.obj binary
 *.gltf binary
+
+libs/* linguist-vendored
