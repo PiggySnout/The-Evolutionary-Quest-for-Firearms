@@ -1,14 +1,14 @@
 #pragma once
 #include "raylib.h"
-#include "ui.h"
-#include "Player.h"
-#include "Bullet.h"
-#include "textures.h"
-#include "Camera.h"
+#include "ui.hpp"
+#include "Player.hpp"
+#include "Bullet.hpp"
+#include "textures.hpp"
+#include "Camera.hpp"
 #include <vector>
 #include <fstream>
-#include "WeaponData.h"
-#include "Npc.h"
+#include "WeaponData.hpp"
+#include "Npc.hpp"
 
 #define mob_cap 10
 

@@ -1,5 +1,5 @@
-#include "ui.h"
-#include "WeaponData.h"
+#include "ui.hpp"
+#include "WeaponData.hpp"
 #include <raylib.h>
 #include <memory>
 #include<cassert>

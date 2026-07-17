@@ -1,6 +1,6 @@
-#include "Camera.h"
-#include "Game.h"
-#include "WeaponData.h"
+#include "Camera.hpp"
+#include "Game.hpp"
+#include "WeaponData.hpp"
 #include <cmath>
 namespace jtodd{
     Camera::Camera(Player& p, std::vector<Bullet>& Bullets, Textures& T, ui& u, Weapon& w, std::vector<weaponStat>& VWS, std::vector<Npc>& Npcs) : p(p),

@@ -1,4 +1,4 @@
-#include "Npc.h"
+#include "Npc.hpp"
 #include "raylib.h"
 #include "raymath.h"
 #include <iostream>

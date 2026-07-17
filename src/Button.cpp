@@ -1,4 +1,4 @@
-#include "Button.h"
+#include "Button.hpp"
 #include <raylib.h>
 #include <format>
 Button::Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<weaponStat>& VWS, int ak_number, bool isWeaponButton) : rec(rec),

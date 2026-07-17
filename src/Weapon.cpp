@@ -1,5 +1,5 @@
-#include "Weapon.h"
-#include "WeaponData.h"
+#include "Weapon.hpp"
+#include "WeaponData.hpp"
 #include <iostream>
 #include <string>
 #include <format>

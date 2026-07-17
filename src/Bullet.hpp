@@ -1,7 +1,7 @@
 #pragma once
 #include "raylib.h"
-#include "textures.h"
-#include "Npc.h"
+#include "textures.hpp"
+#include "Npc.hpp"
 #include <vector>
 class Bullet{
 

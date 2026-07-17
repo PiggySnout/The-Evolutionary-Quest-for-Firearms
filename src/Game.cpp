@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "Game.hpp"
 #include "raymath.h"
 #include <iostream>
 #include <format>

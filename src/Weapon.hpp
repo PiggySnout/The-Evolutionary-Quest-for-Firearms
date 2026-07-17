@@ -1,10 +1,10 @@
 #pragma once
 #include "raylib.h"
-#include "textures.h"
+#include "textures.hpp"
 #include "raymath.h"
 #include <vector>
-#include "Bullet.h"
-#include "WeaponData.h"
+#include "Bullet.hpp"
+#include "WeaponData.hpp"
 
 class Weapon{
 

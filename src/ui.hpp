@@ -1,10 +1,10 @@
 #pragma once
 #include <raylib.h>
-#include "Button.h"
+#include "Button.hpp"
 #include <array>
 #include <memory>
-#include "Player.h"
-#include "Weapon.h"
+#include "Player.hpp"
+#include "Weapon.hpp"
 class ui{
 public:
 

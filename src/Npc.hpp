@@ -2,8 +2,8 @@
 #include "raylib.h"
 #include <vector>
 #include <ctime>
-#include "textures.h"
-#include "Species.h"
+#include "textures.hpp"
+#include "Species.hpp"
 enum class AIType{Coward, Hunter, Tank, Pack, Ambush};
 
 

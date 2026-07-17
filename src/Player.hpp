@@ -3,10 +3,10 @@
 
 #include <raylib.h>
 #include <ctime>
-#include "Bullet.h"
-#include "textures.h"
-#include "Weapon.h"
-#include "Species.h"
+#include "Bullet.hpp"
+#include "textures.hpp"
+#include "Weapon.hpp"
+#include "Species.hpp"
 
 #include <memory>
 

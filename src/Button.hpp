@@ -1,7 +1,7 @@
 #pragma once
 #include <raylib.h>
 #include <string>
-#include "WeaponData.h"
+#include "WeaponData.hpp"
 #include <vector>
 class Button{
 

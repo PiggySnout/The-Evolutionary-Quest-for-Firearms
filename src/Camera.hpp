@@ -1,12 +1,12 @@
 #pragma once
 #include "raylib.h"
-#include "textures.h"
+#include "textures.hpp"
 #include <vector>
 #include <algorithm>
-#include "Player.h"
-#include "Bullet.h"
-#include "ui.h"
-#include "Npc.h"
+#include "Player.hpp"
+#include "Bullet.hpp"
+#include "ui.hpp"
+#include "Npc.hpp"
 namespace jtodd{
     class Camera{
     public:
