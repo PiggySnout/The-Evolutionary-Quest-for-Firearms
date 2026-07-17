@@ -9,11 +9,12 @@
 #include "Species.hpp"
 
 #include <memory>
+#include "EvoData.hpp"
 
 class Player {
 
 public:
-    Player(Textures& T);
+    Player(Textures& T, std::vector<EvoData>& EvoStats);
     void Draw(Vector2 pos) const;
     void UpdateTexture();
     bool Input();
@@ -41,6 +42,8 @@ public:
 
 private:
 
+
+    std::vector<EvoData>& EvoStats;
     Species S;
     Texture2D* texture1;
     Texture2D* texture2;
@@ -49,11 +52,13 @@ private:
     float x, y;
     
     bool textureToUse;
-    Family F;
     float speed;
 
     unsigned int xp;
     unsigned int gold;
+
+    int passiveXp;
+    int passiveGold;
 
     float hp;
 

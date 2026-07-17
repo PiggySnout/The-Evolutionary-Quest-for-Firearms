@@ -3,13 +3,15 @@
 #include <iostream>
 #include <format>
 #include <algorithm>
+#include "Species.hpp"
 Game::Game() : level(0),
                last(std::time(nullptr)),
-               p(T),
+               p(T, EvoStats),
                w(T, WeaponStats),
                C(p, Bullets, T, u, w, WeaponStats, Npcs),
                u(p, w, WeaponStats),
                WeaponStats(ReadStats()),
+               EvoStats(ReadEvoData()),
                timer(-1),
                MedkitPrice(10)
                
@@ -277,3 +279,51 @@ void Game::manageButtons(){
     }
 }
 
+std::vector<EvoData> Game::ReadEvoData(){
+    std::vector<EvoData> V{};
+    std::ifstream FILE(ASSETS_PATH"EvolutionStats.txt");
+    if (!FILE){
+        std::cout << "ERROR: Failed to open EvolutionStats.txt\n";
+        return V;
+    }   
+    std::string Str;
+    FILE>>Str;
+    Species S;
+    if (Str == "Amphibian")
+        S = Species::Amphibian;
+    else if (Str == "Bird")
+        S = Species::Bird;
+    else if (Str == "Bush")
+        S = Species::Bush;
+    else if (Str == "Canine")
+        S = Species::Canine;
+    else if (Str == "Crocodile")
+        S = Species::Crocodile;
+    else if (Str == "Feline")
+        S = Species::Feline;
+    else if (Str == "Mold")
+        S = Species::Mold;
+    else if (Str == "Mushroom")
+        S = Species::Mushroom;
+    else if (Str == "Mycellium")
+        S = Species::Mycellium;
+    else if (Str == "Primate")
+        S = Species::Primate;
+    else if (Str == "Shark")
+        S = Species::Shark;
+    else if (Str == "Single_Cell")
+        S = Species::Single_Cell;
+    else if (Str == "Snake")
+        S = Species::Snake;
+    else if (Str == "Tree")
+        S = Species::Tree;
+    else if (Str == "Weed")
+        S = Species::Weed;
+    float speed, health;
+    unsigned int passive_xp, passive_gold;
+    while (FILE>>speed>>health>>passive_xp>>passive_gold){
+        EvoData ED(S, speed, health, passive_xp, passive_gold);
+        V.push_back(ED);
+    }
+    return V;
+}

@@ -3,13 +3,13 @@
 #include  <ctime>
 #include <algorithm>
 #include <iostream>
-Player::Player(Textures& T) :  
-    S(Species::Single_Cell), 
+Player::Player(Textures& T, std::vector<EvoData>& EvoStats) :  
+    EvoStats(EvoStats),
+    S(EvoStats[0].species), 
     x(0),
     y(0),
     textureToUse(false),
-    F(Family::Bacteria),
-    speed(1.0f),
+    speed(EvoStats[0].speed),
     xp(10),
     gold(0),
     hp(100.0f),
@@ -21,7 +21,9 @@ Player::Player(Textures& T) :
     texture1(nullptr),
     texture2(nullptr),
     texture1_death(nullptr),
-    texture2_death(nullptr)
+    texture2_death(nullptr),
+    passiveXp(EvoStats[0].passive_xp),
+    passiveGold(EvoStats[0].passive_gold)
 {
     Evolve();
 }
@@ -47,24 +49,19 @@ void Player::Draw(Vector2 pos) const{
         Correct(WH).x,
         Correct(WH).y
     };
-
-    DrawRectangleLines(
-        pos.x,
-        pos.y,
-        Correct(WH).x,
-        Correct(WH).y,
-        GREEN
-    );
-
     DrawTexturePro(textureToUse ? *texture1 : *texture2, Src, Dest, {0,0}, 0.0f, damageTimer > 0 ? RED : WHITE);
 }
 void Player::UpdateTexture(){
     textureToUse = !textureToUse;
+    xp += passiveXp;
+    gold += passiveGold;
+
 }
 bool Player::Input(){
 
     float dx = 0.0f;
     float dy = 0.0f;
+
 
     if (IsKeyDown(KEY_W)) dy -= speed;
     if (IsKeyDown(KEY_S)) dy += speed;
@@ -175,10 +172,11 @@ void Player::Evolve(){
         texture2_death = &T.Single_Cell_2_Death;
         return;
     }
-    if (evo_level == 10){ //Species change
+    if (S != EvoStats[evo_level].species){ //Species change (evo_level is the next level)
         evo_level = 1;
         //do loads of stuff like buttons for choosing next evolution and shit
         //I'll do the other stuff later but rn I'll do the texture settings
+        S = EvoStats[evo_level].species;
         switch (S){
             case Species::Amphibian:
                 texture1 = &T.Amphibian_1;
@@ -308,9 +306,16 @@ void Player::Evolve(){
                 break;
             
         }
+        
         return;
     }
 
     ++evo_level;
+    
+    hp = EvoStats[evo_level - 1].health;
+    speed = EvoStats[evo_level - 1].speed;
+    passiveXp = EvoStats[evo_level - 1].passive_xp;
+    passiveGold = EvoStats[evo_level - 1].passive_gold;
+
 
 }

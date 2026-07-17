@@ -9,6 +9,7 @@
 #include <fstream>
 #include "WeaponData.hpp"
 #include "Npc.hpp"
+#include "EvoData.hpp"
 
 #define mob_cap 10
 
@@ -23,6 +24,7 @@ public:
     void SpawnEnemies();
 
     std::vector<weaponStat> ReadStats();
+    std::vector<EvoData> ReadEvoData();
 
     void LevelUp();
 
@@ -42,6 +44,7 @@ private:
     
 
     std::vector<weaponStat> WeaponStats;
+    std::vector<EvoData> EvoStats;
     Textures T;
     ui u;
     Player p;
