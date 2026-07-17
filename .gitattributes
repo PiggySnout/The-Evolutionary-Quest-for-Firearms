@@ -8,4 +8,4 @@
 *.obj binary
 *.gltf binary
 
-libs/* linguist-vendored
+libs/raylib/* linguist-vendored
