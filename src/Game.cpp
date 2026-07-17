@@ -5,7 +5,7 @@
 #include <algorithm>
 Game::Game() : level(0),
                last(std::time(nullptr)),
-               p(T.Tree_1, T.Tree_1),
+               p(T),
                w(T, WeaponStats),
                C(p, Bullets, T, u, w, WeaponStats, Npcs),
                u(p, w, WeaponStats),

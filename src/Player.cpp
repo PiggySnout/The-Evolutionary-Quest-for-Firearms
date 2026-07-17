@@ -3,7 +3,7 @@
 #include  <ctime>
 #include <algorithm>
 #include <iostream>
-Player::Player(const Textures& T) :  
+Player::Player(Textures& T) :  
     S(Species::Single_Cell), 
     x(0),
     y(0),
@@ -17,7 +17,11 @@ Player::Player(const Textures& T) :
     dead(false),
     facingRight(true),
     evo_level(0),
-    T(T)
+    T(T),
+    texture1(nullptr),
+    texture2(nullptr),
+    texture1_death(nullptr),
+    texture2_death(nullptr)
 {
     Evolve();
 }
@@ -27,15 +31,15 @@ void Player::Draw(Vector2 pos) const{
     pos.x -= 45.0f;
     pos.y -= 50.0f;
     Rectangle Src{
-        facingRight ? 0 : textureToUse ? static_cast<float>(texture1.width) : static_cast<float>(texture2.width),
+        facingRight ? 0 : textureToUse ? static_cast<float>(texture1->width) : static_cast<float>(texture2->width),
         0,
-        facingRight ? textureToUse ? static_cast<float>(texture1.width) : static_cast<float>(texture2.width) : 
-            textureToUse ? static_cast<float>(-texture1.width) : static_cast<float>(-texture2.width),
-        textureToUse ? static_cast<float>(texture1.height) : static_cast<float>(texture2.height)
+        facingRight ? textureToUse ? static_cast<float>(texture1->width) : static_cast<float>(texture2->width) : 
+            textureToUse ? static_cast<float>(-texture1->width) : static_cast<float>(-texture2->width),
+        textureToUse ? static_cast<float>(texture1->height) : static_cast<float>(texture2->height)
     };
     Vector2 WH{
-        (textureToUse ? static_cast<float>(texture1.width) : static_cast<float>(texture2.width)),
-        (textureToUse ? static_cast<float>(texture1.height) : static_cast<float>(texture2.height))
+        (textureToUse ? static_cast<float>(texture1->width) : static_cast<float>(texture2->width)),
+        (textureToUse ? static_cast<float>(texture1->height) : static_cast<float>(texture2->height))
     };
     Rectangle Dest{
         pos.x, 
@@ -52,7 +56,7 @@ void Player::Draw(Vector2 pos) const{
         GREEN
     );
 
-    DrawTexturePro(textureToUse ? texture1 : texture2, Src, Dest, {0,0}, 0.0f, damageTimer > 0 ? RED : WHITE);
+    DrawTexturePro(textureToUse ? *texture1 : *texture2, Src, Dest, {0,0}, 0.0f, damageTimer > 0 ? RED : WHITE);
 }
 void Player::UpdateTexture(){
     textureToUse = !textureToUse;
@@ -110,12 +114,12 @@ void Player::giveXp(int xp){
 
 Vector2 Player::getTextureDim(){
     Vector2 One{
-        static_cast<float>(texture1.width), 
-        static_cast<float>(texture1.height)
+        static_cast<float>(texture1->width), 
+        static_cast<float>(texture1->height)
     };
     Vector2 Two{
-        static_cast<float>(texture2.width),
-        static_cast<float>(texture2.height)
+        static_cast<float>(texture2->width),
+        static_cast<float>(texture2->height)
     };
     return textureToUse ? One : Two;
 }
@@ -152,8 +156,8 @@ void Player::Heal(float a){
 
 Vector2 Player::Correct(Vector2 V) const{
 
-    float proportionW = (textureToUse ? texture1.width : texture2.width) / 100.0f;
-    float proportionH = (textureToUse ? texture1.height : texture2.height) / 90.0f;
+    float proportionW = (textureToUse ? texture1->width : texture2->width) / 100.0f;
+    float proportionH = (textureToUse ? texture1->height : texture2->height) / 90.0f;
 
     float scale = proportionW > proportionH ? proportionW : proportionH;
     scale = 1.0f / scale;
@@ -165,10 +169,10 @@ Vector2 Player::Correct(Vector2 V) const{
 void Player::Evolve(){
     if (evo_level == 0){ //init
         evo_level = 1;
-        texture1 = T.Single_Cell_1;
-        texture2 = T.Single_Cell_2;
-        texture1_death = T.Single_Cell_1_Death;
-        texture2_death = T.Single_Cell_2_Death;
+        texture1 = &T.Single_Cell_1;
+        texture2 = &T.Single_Cell_2;
+        texture1_death = &T.Single_Cell_1_Death;
+        texture2_death = &T.Single_Cell_2_Death;
         return;
     }
     if (evo_level == 10){ //Species change
@@ -177,76 +181,130 @@ void Player::Evolve(){
         //I'll do the other stuff later but rn I'll do the texture settings
         switch (S){
             case Species::Amphibian:
-                texture1 = T.Amphibian_1;
-                texture2 = T.Amphibian_2;
-                texture1_death = T.Amphibian_1_Death;
-                texture2_death = T.Amphibian_2_Death;
+                texture1 = &T.Amphibian_1;
+                texture2 = &T.Amphibian_2;
+                texture1_death = &T.Amphibian_1_Death;
+                texture2_death = &T.Amphibian_2_Death;
                 break;
             case Species::Bird:
-                texture1 = T.Bird_1;
-                texture2 = T.Bird_2;
-                texture1_death = T.Bird_1_Death;
-                texture2_death = T.Bird_2_Death;
+                texture1 = &T.Bird_1;
+                texture2 = &T.Bird_2;
+                texture1_death = &T.Bird_1_Death;
+                texture2_death = &T.Bird_2_Death;
                 break;
             case Species::Bush:
-                texture1 = T.Bush_1;
-                texture2 = T.Bush_2;
-                texture1_death = T.Bush_1_Death;
-                texture2_death = T.Bush_2_Death;
+                texture1 = &T.Bush_1;
+                texture2 = &T.Bush_2;
+                texture1_death = &T.Bush_1_Death;
+                texture2_death = &T.Bush_2_Death;
                 break;
             case Species::Canine:
-                texture1 = T.Canine_1;
-                texture2 = T.Canine_2;
-                texture1_death = T.Canine_1_Death;
-                texture2_death = T.Canine_2_Death;
+                texture1 = &T.Canine_1;
+                texture2 = &T.Canine_2;
+                texture1_death = &T.Canine_1_Death;
+                texture2_death = &T.Canine_2_Death;
                 break;
             case Species::Crocodile:
-                texture1 = T.Crocodile_1;
-                texture2 = T.Crocodile_2;
-                texture1_death = T.Crocodile_1_Death;
-                texture2_death = T.Crocodile_2_Death;
+                texture1 = &T.Crocodile_1;
+                texture2 = &T.Crocodile_2;
+                texture1_death = &T.Crocodile_1_Death;
+                texture2_death = &T.Crocodile_2_Death;
                 break;
             case Species::Feline:
-                texture1 = T.Feline_1;
-                texture2 = T.Feline_2;
-                texture1_death = T.Feline_1_Death;
-                texture2_death = T.Feline_2_Death;
+                texture1 = &T.Feline_1;
+                texture2 = &T.Feline_2;
+                texture1_death = &T.Feline_1_Death;
+                texture2_death = &T.Feline_2_Death;
                 break;
-            case Species::Fish
-                texture1 = T.Fish_1;
-                texture2 = T.Fish_2;
-                texture1_death = T.Fish_1_Death;
-                texture2_death = T.Fish_2_Death;
+            case Species::Fish:
+                texture1 = &T.Fish_1;
+                texture2 = &T.Fish_2;
+                texture1_death = &T.Fish_1_Death;
+                texture2_death = &T.Fish_2_Death;
                 break;
-            case Species::
-                texture1 = T.Amphibian_1;
-                texture2 = T.Amphibian_2;
-                texture1_death = T.Amphibian_1_Death;
-                texture2_death = T.Amphibian_2_Death;
+            case Species::Flower:
+                texture1 = &T.Flower_1;
+                texture2 = &T.Flower_2;
+                texture1_death = &T.Flower_1_Death;
+                texture2_death = &T.Flower_2_Death;
                 break;
-            case Species::Amphibian:
-                texture1 = T.Amphibian_1;
-                texture2 = T.Amphibian_2;
-                texture1_death = T.Amphibian_1_Death;
-                texture2_death = T.Amphibian_2_Death;
+            case Species::Fungus:
+                texture1 = &T.Fungus_1;
+                texture2 = &T.Fungus_2;
+                texture1_death = &T.Fungus_1_Death;
+                texture2_death = &T.Fungus_2_Death;
                 break;
-            case Species::Amphibian:
-                texture1 = T.Amphibian_1;
-                texture2 = T.Amphibian_2;
-                texture1_death = T.Amphibian_1_Death;
-                texture2_death = T.Amphibian_2_Death;
+            case Species::Grass:
+                texture1 = &T.Grass_1;
+                texture2 = &T.Grass_2;
+                texture1_death = &T.Grass_1_Death;
+                texture2_death = &T.Grass_2_Death;
                 break;
-            case Species::Amphibian:
-                texture1 = T.Amphibian_1;
-                texture2 = T.Amphibian_2;
-                texture1_death = T.Amphibian_1_Death;
-                texture2_death = T.Amphibian_2_Death;
+            case Species::Human:
+                texture1 = &T.Human_1;
+                texture2 = &T.Human_2;
+                texture1_death = &T.Human_1_Death;
+                texture2_death = &T.Human_2_Death;
                 break;
-            case Species::Amphibian:
-                texture1 = T.Amphibian_1;
-                texture2 = T.Amphibian_2;
-                texture1_death = T.Amphibian_1_Death;
-                texture2_death = T.Amphibian_2_Death;
+            case Species::Late_Dinosaur:
+                texture1 = &T.Late_Dinosaur_1;
+                texture2 = &T.Late_Dinosaur_2;
+                texture1_death = &T.Late_Dinosaur_1_Death;
+                texture2_death = &T.Late_Dinosaur_2_Death;
+                break;
+            case Species::Mold:
+                texture1 = &T.Mould_1;
+                texture2 = &T.Mould_2;
+                texture1_death = &T.Mould_1_Death;
+                texture2_death = &T.Mould_2_Death;
+                break;
+            case Species::Mushroom:
+                texture1 = &T.Mushroom_1;
+                texture2 = &T.Mushroom_2;
+                texture1_death = &T.Mushroom_1_Death;
+                texture2_death = &T.Mushroom_2_Death;
+                break;
+            case Species::Mycellium:
+                texture1 = &T.Mycellium_1;
+                texture2 = &T.Mycellium_2;
+                texture1_death = &T.Mycellium_1_Death;
+                texture2_death = &T.Mycellium_2_Death;
+                break;
+            case Species::Primate:
+                texture1 = &T.Primate_1;
+                texture2 = &T.Primate_2;
+                texture1_death = &T.Primate_1_Death;
+                texture2_death = &T.Primate_2_Death;
+                break;
+            case Species::Shark:
+                texture1 = &T.Shark_1;
+                texture2 = &T.Shark_2;
+                texture1_death = &T.Shark_1_Death;
+                texture2_death = &T.Shark_2_Death;
+                break;
+            case Species::Single_Cell:
+                texture1 = &T.Single_Cell_1;
+                texture2 = &T.Single_Cell_2;
+                texture1_death = &T.Single_Cell_1_Death;
+                texture2_death = &T.Single_Cell_2_Death;
+                break;
+            case Species::Snake:
+                texture1 = &T.Snake_1;
+                texture2 = &T.Snake_2;
+                texture1_death = &T.Snake_1_Death;
+                texture2_death = &T.Snake_2_Death;
+                break;
+            case Species::Tree:
+                texture1 = &T.Tree_1;
+                texture2 = &T.Tree_2;
+                texture1_death = &T.Tree_1_Death;
+                texture2_death = &T.Tree_2_Death;
+                break;
+            case Species::Weed:
+                texture1 = &T.Weed_1;
+                texture2 = &T.Weed_2;
+                texture1_death = &T.Weed_1_Death;
+                texture2_death = &T.Weed_2_Death;
                 break;
             
         }

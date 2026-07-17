@@ -8,12 +8,12 @@
 #include "Weapon.h"
 #include "Species.h"
 
-
+#include <memory>
 
 class Player {
 
 public:
-    Player(const Textures& T);
+    Player(Textures& T);
     void Draw(Vector2 pos) const;
     void UpdateTexture();
     bool Input();
@@ -42,10 +42,10 @@ public:
 private:
 
     Species S;
-    Texture2D& texture1;
-    Texture2D& texture2;
-    Texture2D& texture1_death;
-    Texture2D& texture2_death;
+    Texture2D* texture1;
+    Texture2D* texture2;
+    Texture2D* texture1_death;
+    Texture2D* texture2_death;
     float x, y;
     
     bool textureToUse;
@@ -67,7 +67,7 @@ private:
 
     Vector2 Correct(Vector2 V) const;
 
-    const Textures& T;
+    Textures& T;
 
     
 };
