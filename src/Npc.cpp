@@ -191,7 +191,7 @@ void Npc::HunterMove(){ //fast, aggro if it can see u
 
     if (aggroed)
         Destination = {playerPos.x - 50, playerPos.y - 45};
-    else if (Vector2Distance(Pos, Destination) < 2.0f){
+    else if (Vector2Distance(Pos, Destination) < 5.0f){
         if (aggroed)
             return;
         else if (MoveTimer == -1)
@@ -205,14 +205,21 @@ void Npc::HunterMove(){ //fast, aggro if it can see u
             --MoveTimer;
     }
 
-    Vector2 move = Vector2Subtract(Destination, Pos);
-    move = Vector2Normalize(move);
-    move = Vector2Scale(move, speed);
+    Vector2 toTarget = Vector2Subtract(Destination, Pos);
+    float dist = Vector2Length(toTarget);
+
+    Vector2 move;
+    if (dist <= speed || dist < 0.001f) {
+        // close enough — snap to it instead of overshooting
+        move = toTarget;
+    } else {
+        move = Vector2Scale(Vector2Normalize(toTarget), speed);
+    }
+    Pos = Vector2Add(Pos, move);
     if (move.x < 0 && facingRight && MoveTimer == -1)
         facingRight = false;
     if (move.x > 0 && !facingRight && MoveTimer == -1)
         facingRight = true;
-    Pos = Vector2Add(Pos, move);
 }
 void Npc::CowardMove(){ //very fast, runs away, if you are far away enough it forgets
     if (hp <= 0)
@@ -225,7 +232,7 @@ void Npc::CowardMove(){ //very fast, runs away, if you are far away enough it fo
 
     if (aggroed)
         Destination = {playerPos.x - 50, playerPos.y - 45};
-    else if (Vector2Distance(Pos, Destination) < 2.0f){
+    else if (Vector2Distance(Pos, Destination) < 5.0f){
         if (MoveTimer == -1)
             MoveTimer = 180;
         else if (MoveTimer <= 0){
@@ -237,14 +244,21 @@ void Npc::CowardMove(){ //very fast, runs away, if you are far away enough it fo
             --MoveTimer;
     }
 
-    Vector2 move = Vector2Subtract(Pos, Destination);
-    move = Vector2Normalize(move);
-    move = Vector2Scale(move, speed);
+    Vector2 toTarget = Vector2Subtract(Destination, Pos);
+    float dist = Vector2Length(toTarget);
+
+    Vector2 move;
+    if (dist <= speed || dist < 0.001f) {
+        // close enough — snap to it instead of overshooting
+        move = toTarget;
+    } else {
+        move = Vector2Scale(Vector2Normalize(toTarget), speed);
+    }
+    Pos = Vector2Add(Pos, move);
     if (move.x < 0 && facingRight && MoveTimer == -1)
         facingRight = false;
     if (move.x > 0 && !facingRight && MoveTimer == -1)
         facingRight = true;
-    Pos = Vector2Add(Pos, move);
 } 
 void Npc::PackMove(){ //aggroes all other Npcs within a certain radius
     if (hp <= 0)
@@ -264,7 +278,7 @@ void Npc::PackMove(){ //aggroes all other Npcs within a certain radius
                 i.Aggro();
         }
     }
-    else if (Vector2Distance(Pos, Destination) < 2.0f){
+    else if (Vector2Distance(Pos, Destination) < 5.0f){
         if (MoveTimer == -1)
             MoveTimer = 180;
         else if (MoveTimer <= 0){
@@ -276,14 +290,21 @@ void Npc::PackMove(){ //aggroes all other Npcs within a certain radius
             --MoveTimer;
     }
 
-    Vector2 move = Vector2Subtract(Pos, Destination);
-    move = Vector2Normalize(move);
-    move = Vector2Scale(move, speed);
+    Vector2 toTarget = Vector2Subtract(Destination, Pos);
+    float dist = Vector2Length(toTarget);
+
+    Vector2 move;
+    if (dist <= speed || dist < 0.001f) {
+        // close enough — snap to it instead of overshooting
+        move = toTarget;
+    } else {
+        move = Vector2Scale(Vector2Normalize(toTarget), speed);
+    }
+    Pos = Vector2Add(Pos, move);
     if (move.x < 0 && facingRight && MoveTimer == -1)
         facingRight = false;
     if (move.x > 0 && !facingRight && MoveTimer == -1)
         facingRight = true;
-    Pos = Vector2Add(Pos, move);
 
 
     
@@ -304,7 +325,7 @@ void Npc::TankMove(){ //slow, more hp
     }
     if (aggroed)
         Destination = {playerPos.x - 50, playerPos.y - 45};
-    else if (Vector2Distance(Pos, Destination) < 2.0f){
+    else if (Vector2Distance(Pos, Destination) < 5.0f){
         if (MoveTimer == -1)
             MoveTimer = 180;
         else if (MoveTimer <= 0){
@@ -316,14 +337,21 @@ void Npc::TankMove(){ //slow, more hp
             --MoveTimer;
     }
 
-    Vector2 move = Vector2Subtract(Destination, Pos);
-    move = Vector2Normalize(move);
-    move = Vector2Scale(move, speed);
+    Vector2 toTarget = Vector2Subtract(Destination, Pos);
+    float dist = Vector2Length(toTarget);
+
+    Vector2 move;
+    if (dist <= speed || dist < 0.001f) {
+        // close enough — snap to it instead of overshooting
+        move = toTarget;
+    } else {
+        move = Vector2Scale(Vector2Normalize(toTarget), speed);
+    }
+    Pos = Vector2Add(Pos, move);
     if (move.x < 0 && facingRight && MoveTimer == -1)
         facingRight = false;
     if (move.x > 0 && !facingRight && MoveTimer == -1)
         facingRight = true;
-    Pos = Vector2Add(Pos, move);
 }
 void Npc::AmbushMove(){
     if (hp <= 0)
@@ -340,7 +368,7 @@ void Npc::AmbushMove(){
     
     if (aggroed)
         Destination = {playerPos.x - 50, playerPos.y - 45};
-    else if (Vector2Distance(Pos, Destination) < 2.0f){
+    else if (Vector2Distance(Pos, Destination) < 5.0f){
         if (MoveTimer == -1)
             MoveTimer = 180;
         else if (MoveTimer <= 0){
@@ -352,17 +380,23 @@ void Npc::AmbushMove(){
             --MoveTimer;
     }
 
-    Vector2 move = Vector2Subtract(Destination, Pos);
-    move = Vector2Normalize(move);
-    move = Vector2Scale(move, speed);
+    Vector2 toTarget = Vector2Subtract(Destination, Pos);
+    float dist = Vector2Length(toTarget);
+
+    Vector2 move;
+    if (dist <= speed || dist < 0.001f) {
+        // close enough — snap to it instead of overshooting
+        move = toTarget;
+    } else {
+        move = Vector2Scale(Vector2Normalize(toTarget), speed);
+    }
+    Pos = Vector2Add(Pos, move);
 
     if (move.x < 0 && facingRight && MoveTimer == -1)
         facingRight = false;
     if (move.x > 0 && !facingRight && MoveTimer == -1)
         facingRight = true;
 
-
-    Pos = Vector2Add(Pos, move);
 }
 
 float Npc::getDamage() const{

@@ -21,6 +21,8 @@ public:
     Vector2 getPos() const;
     int getGold() const;
     int getXP() const;
+    int getPassiveGold() const;
+    int getPassiveXp() const;
 
     void giveGold(int gold);
     void giveXp(int xp);
@@ -39,6 +41,7 @@ public:
 
     void Evolve();
     
+    float getMaxHealth() const;
 
 private:
 
@@ -61,6 +64,7 @@ private:
     int passiveGold;
 
     float hp;
+    float max_hp;
 
     bool facingRight;
 

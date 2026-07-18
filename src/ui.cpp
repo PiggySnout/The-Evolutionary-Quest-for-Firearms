@@ -161,7 +161,11 @@ void ui::EvalCursor(){
 void ui::PrintStats() const{
     DrawText(TextFormat("Weapon Level: %d", weapon.getak_number()), 10, 10, 20, LIGHTGRAY);
     DrawText(TextFormat("XP: %d", player.getXP()), 10, 40, 20, GREEN);
-    DrawText(TextFormat("Gold: %d", player.getGold()), 10, 70, 20, GOLD);
+    DrawText(TextFormat("Gold: %d", player.getGold()), 10, 70, 20, GOLD); 
+    DrawText(TextFormat("Passive Xp: %d", player.getPassiveXp()), 10, 100, 20, DARKGREEN);  
+    DrawText(TextFormat("Passive Gold: %d", player.getPassiveGold()), 10, 130, 20, YELLOW);
+    
+
 }
 
 bool ui::isNull(int i) const{
@@ -176,5 +180,6 @@ void ui::DrawHealth(){
 
 
     DrawRectangle(x_BarPos, 10.0f, HealthBarLength, 30, RED);
-    DrawRectangle(x_BarPos, 10.0f, player.getHealth()/100*HealthBarLength, 30, GREEN);
+    DrawRectangle(x_BarPos, 10.0f, player.getHealth()/player.getMaxHealth() * HealthBarLength, 30, GREEN);
+    DrawText(TextFormat("Hp: %d", static_cast<int>(player.getHealth())), GetScreenWidth() / 2 - 10, 50, 20, RED);
 }

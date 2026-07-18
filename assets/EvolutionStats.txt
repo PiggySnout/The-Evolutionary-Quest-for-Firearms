@@ -1,5 +1,5 @@
 Single_Cell 1.0 100.0 0 0
-Single_Cell 1.0 102.0 0 0
+Single_Cell 1.0 102.0 0 10
 Single_Cell 1.1 102.0 0 0
 Single_Cell 1.2 102.0 0 0
 Single_Cell 1.2 102.0 0 0

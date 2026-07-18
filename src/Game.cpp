@@ -255,7 +255,7 @@ void Game::manageButtons(){
 
     if (u.getButton(1).Input()){
         p.giveXp(-(u.getButton(1).getPrice()));
-        //p.Evolve
+        p.Evolve();
     }
     //Medkit Button
     if (u.isNull(2))
@@ -287,41 +287,42 @@ std::vector<EvoData> Game::ReadEvoData(){
         return V;
     }   
     std::string Str;
-    FILE>>Str;
+    
     Species S;
-    if (Str == "Amphibian")
-        S = Species::Amphibian;
-    else if (Str == "Bird")
-        S = Species::Bird;
-    else if (Str == "Bush")
-        S = Species::Bush;
-    else if (Str == "Canine")
-        S = Species::Canine;
-    else if (Str == "Crocodile")
-        S = Species::Crocodile;
-    else if (Str == "Feline")
-        S = Species::Feline;
-    else if (Str == "Mold")
-        S = Species::Mold;
-    else if (Str == "Mushroom")
-        S = Species::Mushroom;
-    else if (Str == "Mycellium")
-        S = Species::Mycellium;
-    else if (Str == "Primate")
-        S = Species::Primate;
-    else if (Str == "Shark")
-        S = Species::Shark;
-    else if (Str == "Single_Cell")
-        S = Species::Single_Cell;
-    else if (Str == "Snake")
-        S = Species::Snake;
-    else if (Str == "Tree")
-        S = Species::Tree;
-    else if (Str == "Weed")
-        S = Species::Weed;
+    
     float speed, health;
     unsigned int passive_xp, passive_gold;
-    while (FILE>>speed>>health>>passive_xp>>passive_gold){
+    while (FILE>>Str>>speed>>health>>passive_xp>>passive_gold){
+        if (Str == "Amphibian")
+            S = Species::Amphibian;
+        else if (Str == "Bird")
+            S = Species::Bird;
+        else if (Str == "Bush")
+            S = Species::Bush;
+        else if (Str == "Canine")
+            S = Species::Canine;
+        else if (Str == "Crocodile")
+            S = Species::Crocodile;
+        else if (Str == "Feline")
+            S = Species::Feline;
+        else if (Str == "Mold")
+            S = Species::Mold;
+        else if (Str == "Mushroom")
+            S = Species::Mushroom;
+        else if (Str == "Mycellium")
+            S = Species::Mycellium;
+        else if (Str == "Primate")
+            S = Species::Primate;
+        else if (Str == "Shark")
+            S = Species::Shark;
+        else if (Str == "Single_Cell")
+            S = Species::Single_Cell;
+        else if (Str == "Snake")
+            S = Species::Snake;
+        else if (Str == "Tree")
+            S = Species::Tree;
+        else if (Str == "Weed")
+            S = Species::Weed;
         EvoData ED(S, speed, health, passive_xp, passive_gold);
         V.push_back(ED);
     }

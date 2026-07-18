@@ -13,6 +13,7 @@ Player::Player(Textures& T, std::vector<EvoData>& EvoStats) :
     xp(10),
     gold(0),
     hp(100.0f),
+    max_hp(100.0f),
     damageTimer(0),
     dead(false),
     facingRight(true),
@@ -50,6 +51,7 @@ void Player::Draw(Vector2 pos) const{
         Correct(WH).y
     };
     DrawTexturePro(textureToUse ? *texture1 : *texture2, Src, Dest, {0,0}, 0.0f, damageTimer > 0 ? RED : WHITE);
+
 }
 void Player::UpdateTexture(){
     textureToUse = !textureToUse;
@@ -146,8 +148,8 @@ bool Player::IsDead() const{
 
 void Player::Heal(float a){
     hp += a;
-    if (hp > 100.0f)
-        hp = 100.0f;
+    if (hp > max_hp)
+        hp = max_hp;
     
 }
 
@@ -306,16 +308,27 @@ void Player::Evolve(){
                 break;
             
         }
-        
-        return;
     }
 
     ++evo_level;
     
+    max_hp = EvoStats[evo_level - 1].health;
     hp = EvoStats[evo_level - 1].health;
     speed = EvoStats[evo_level - 1].speed;
     passiveXp = EvoStats[evo_level - 1].passive_xp;
     passiveGold = EvoStats[evo_level - 1].passive_gold;
 
 
+}
+
+
+int Player::getPassiveGold() const{
+    return passiveGold;
+}
+int Player::getPassiveXp() const{
+    return passiveXp;
+}
+
+float Player::getMaxHealth() const{
+    return max_hp;
 }
