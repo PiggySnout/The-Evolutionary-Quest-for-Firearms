@@ -84,7 +84,9 @@ bool Game::Logic(){
 
     if (IsKeyDown(KEY_P) && IsKeyDown(KEY_I) && IsKeyPressed(KEY_G))
         LevelUp();
-    
+
+    if (IsKeyDown(KEY_Z) && IsKeyDown(KEY_N) && IsKeyDown(KEY_O) &&IsKeyDown(KEY_U) && IsKeyPressed(KEY_T))
+        p.Evolve();
     SpawnEnemies();
     
     return false;
@@ -231,7 +233,7 @@ void Game::manageButtons(){
             u.getButton(0).ToggleLock(); //unlock if the player has enough gold
     }
     else if (u.getButton(0).getPrice() > p.getGold())
-        u.getButton(0).ToggleLock(); //this should lock it if the player doesn't have enough gold, but it doesn't...
+        u.getButton(0).ToggleLock(); //this should lock it if the player doesn't have enough gold
     
     if (u.getButton(0).Input()){
         w.LevelUp();
@@ -305,6 +307,14 @@ std::vector<EvoData> Game::ReadEvoData(){
             S = Species::Crocodile;
         else if (Str == "Feline")
             S = Species::Feline;
+        else if (Str == "Fungus")
+            S = Species::Fungus;
+        else if (Str == "Fish")
+            S = Species::Fish;
+        else if (Str == "Flower")
+            S = Species::Flower;
+        else if (Str == "Grass")
+            S = Species::Grass;
         else if (Str == "Mold")
             S = Species::Mold;
         else if (Str == "Mushroom")
@@ -323,6 +333,10 @@ std::vector<EvoData> Game::ReadEvoData(){
             S = Species::Tree;
         else if (Str == "Weed")
             S = Species::Weed;
+        else{
+            std::cout << "ERROR: Invalid species in EvolutionStats.txt\n";
+            continue;
+        }
         EvoData ED(S, speed, health, passive_xp, passive_gold);
         V.push_back(ED);
     }

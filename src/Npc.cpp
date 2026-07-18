@@ -96,8 +96,8 @@ void Npc::Draw(Vector2 POS) const{
     Rectangle Dest{
         POS.x,
         POS.y,
-        Texture->width * 10.0f,
-        Texture->height * 10.0f
+        Correct({static_cast<float>(Frame1->width), 0}).x,
+        Correct({0,static_cast<float>(Frame1->height)}).y,
     };
 
     DrawTexturePro(*Texture, Src, Dest, {0,0}, 0.0f, IsTakingDamageTimer > 0 && hp > 0 ? RED : WHITE);
@@ -143,8 +143,8 @@ bool Npc::CheckPlayerCollision(){
     Rectangle NPC{
         Pos.x,
         Pos.y,
-        Correct({static_cast<float>(Frame1->width), 0}).x * 2,
-        Correct({0,static_cast<float>(Frame1->height)}).y * 2,
+        Correct({static_cast<float>(Frame1->width), 0}).x,
+        Correct({0,static_cast<float>(Frame1->height)}).y,
     };
     return CheckCollisionRecs(PLAYER, NPC);
 }

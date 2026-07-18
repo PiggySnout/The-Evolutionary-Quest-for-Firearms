@@ -178,7 +178,6 @@ void ui::DrawHealth(){
     HealthBarLength = GetScreenWidth() * 0.70;
     const float x_BarPos = GetScreenWidth() / 8 + 70;
 
-
     DrawRectangle(x_BarPos, 10.0f, HealthBarLength, 30, RED);
     DrawRectangle(x_BarPos, 10.0f, player.getHealth()/player.getMaxHealth() * HealthBarLength, 30, GREEN);
     DrawText(TextFormat("Hp: %d", static_cast<int>(player.getHealth())), GetScreenWidth() / 2 - 10, 50, 20, RED);

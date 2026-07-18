@@ -39,7 +39,7 @@ public:
 
     void Heal(float a);
 
-    void Evolve();
+    bool Evolve();
     
     float getMaxHealth() const;
 

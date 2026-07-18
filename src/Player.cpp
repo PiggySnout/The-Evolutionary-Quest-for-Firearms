@@ -10,7 +10,7 @@ Player::Player(Textures& T, std::vector<EvoData>& EvoStats) :
     y(0),
     textureToUse(false),
     speed(EvoStats[0].speed),
-    xp(10),
+    xp(100000000),
     gold(0),
     hp(100.0f),
     max_hp(100.0f),
@@ -165,17 +165,17 @@ Vector2 Player::Correct(Vector2 V) const{
     return V;
 }
 
-void Player::Evolve(){
+bool Player::Evolve(){
     if (evo_level == 0){ //init
         evo_level = 1;
         texture1 = &T.Single_Cell_1;
         texture2 = &T.Single_Cell_2;
         texture1_death = &T.Single_Cell_1_Death;
         texture2_death = &T.Single_Cell_2_Death;
-        return;
+        return false;
     }
     if (S != EvoStats[evo_level].species){ //Species change (evo_level is the next level)
-        evo_level = 1;
+        ++evo_level; //when I implement it well this'll be evo_level = 1;, but rn I'm just getting it to work.
         //do loads of stuff like buttons for choosing next evolution and shit
         //I'll do the other stuff later but rn I'll do the texture settings
         S = EvoStats[evo_level].species;
@@ -308,6 +308,7 @@ void Player::Evolve(){
                 break;
             
         }
+        return true;
     }
 
     ++evo_level;
@@ -317,7 +318,7 @@ void Player::Evolve(){
     speed = EvoStats[evo_level - 1].speed;
     passiveXp = EvoStats[evo_level - 1].passive_xp;
     passiveGold = EvoStats[evo_level - 1].passive_gold;
-
+    return false;
 
 }
 
