@@ -23,13 +23,13 @@ public:
 
     int getAk_number();
 
+
 private:
     std::string text; //cannot be const, we wanna change it
     Rectangle rec;
 
     bool hovered;
     bool locked;
-    bool WasClicked;
     bool isWeaponButton;
 
     int Price;

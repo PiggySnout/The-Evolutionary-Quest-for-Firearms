@@ -132,8 +132,8 @@ bool Npc::CheckPlayerCollision(){
         playerSize.x,
         playerSize.y
     };
-    V = Correct(V);
-    //playerPos = Correct(playerPos); //WRONG just keeping it here as a
+    //V = Correct(V); //also wrong, but keeping it here as a memorial
+    //playerPos = Correct(playerPos); //WRONG just keeping it here as a memorial
     Rectangle PLAYER{
         playerPos.x - 50,
         playerPos.y - 45,
@@ -409,8 +409,8 @@ AIType Npc::getAI() const{
 
 Vector2 Npc::Correct(Vector2 V) const{
 
-    float proportionW = playerSize.x / 100.0f;
-    float proportionH = playerSize.y / 90.0f;
+    float proportionW = Frame1->width / 100.0f;
+    float proportionH = Frame1->height / 90.0f;
 
     float scale = proportionW > proportionH ? proportionW : proportionH;
     scale = 1.0f / scale;

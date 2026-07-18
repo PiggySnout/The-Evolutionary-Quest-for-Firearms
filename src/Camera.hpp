@@ -11,7 +11,7 @@ namespace jtodd{
     class Camera{
     public:
 
-        Camera(Player& p, std::vector<Bullet>& Bullets, Textures& T, ui& u, Weapon& w,  std::vector<weaponStat>& VWS, std::vector<Npc>& Npcs);
+        Camera(Player& p, std::vector<Bullet>& Bullets, Textures& T, ui& u, ui& evoUi, Weapon& w,  std::vector<weaponStat>& VWS, std::vector<Npc>& Npcs);
         void Draw_All();
         void UpdateCameraPos();
         Vector2 WorldToScreen(Vector2 V);
@@ -22,6 +22,7 @@ namespace jtodd{
         
         Player& p;
         ui& u;
+        ui& evoUi;
         Weapon& w;
         std::vector<Bullet>& Bullets;
         Texture2D& Background;

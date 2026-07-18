@@ -8,18 +8,25 @@ Game::Game() : level(0),
                last(std::time(nullptr)),
                p(T, EvoStats),
                w(T, WeaponStats),
-               C(p, Bullets, T, u, w, WeaponStats, Npcs),
+               C(p, Bullets, T, u, evoUi, w, WeaponStats, Npcs),
                u(p, w, WeaponStats),
                WeaponStats(ReadStats()),
                EvoStats(ReadEvoData()),
                timer(-1),
-               MedkitPrice(10)
+               MedkitPrice(10),
+               evoUi(p, w, WeaponStats)
                
                
 {
     u.newButton("Weapon_Button", true);
     u.newButton("Evolve", false);
     u.newButton("Medkit +10hp", true);
+
+    evoUi.newButton("Evo_choice_1", false);
+    evoUi.newButton("Evo_choice_2", false);
+    evoUi.newButton("Evo_choice_3", false);
+
+
     u.SetBarTime(300);
 }
 
@@ -39,22 +46,23 @@ bool Game::Logic(){
         return false;
     }
     if (p.Input() && u.IsbarFull() && w.hasAmmo() || u.AdvanceBar())
-
         w.SpawnBullet(p.getPos(), C.ScreenToWorld(GetMousePosition()), Bullets);
     
     if (u.IsbarFull() && !w.hasAmmo())
         u.ResetBar();
     
-    u.DrawButtons();
-    
+    if (!p.getEvolving()){
+        u.DrawButtons();
+    }
+    else
+        evoUi.DrawButtons();
     std::time_t now = std::time(nullptr);
     if (now - last >= 1){
         p.UpdateTexture();
         last = std::time(nullptr);
     }
-    for (Npc& i : Npcs){
+    for (Npc& i : Npcs)
         i.ChangeTexture();
-    }
     Vector2 TruePos{
         p.getPos().x, //+ p.getTextureDim().x / 2
         p.getPos().y //+ p.getTextureDim().y / 2
@@ -219,65 +227,81 @@ void Game::killBullets(){
 }
 
 void Game::manageButtons(){
-    
-    if (w.getak_number() == 47)
-        u.deleteButton(0);
+    if (!p.getEvolving()){
+        if (w.getak_number() == 47)
+            u.deleteButton(0);
 
-    //Weapon Upgrade Button
-    if (u.isNull(0))
-        return;
-    u.getButton(0).setPrice(WeaponStats[w.getak_number()].price); //don't use -1 because we want the next weapon's price
-    u.getButton(0).setText(std::format("UNLOCK LVL {}", w.getak_number()+1));
-    if (u.getButton(0).isLocked()){
-        if (u.getButton(0).getPrice() <= p.getGold())
-            u.getButton(0).ToggleLock(); //unlock if the player has enough gold
-    }
-    else if (u.getButton(0).getPrice() > p.getGold())
-        u.getButton(0).ToggleLock(); //this should lock it if the player doesn't have enough gold
-    
-    if (u.getButton(0).Input()){
-        w.LevelUp();
-        p.giveGold(-(u.getButton(0).getPrice()));
+        //Weapon Upgrade Button
+        if (!u.isNull(0)){
+            u.getButton(0).setText(std::format("UNLOCK LVL {}", w.getak_number()+1));
+            u.getButton(0).setPrice(WeaponStats[w.getak_number()].price); //don't use -1 because we want the next weapon's price
+            if (u.getButton(0).isLocked()){
+                if (u.getButton(0).getPrice() <= p.getGold()){
+                    u.getButton(0).ToggleLock(); //unlock if the player has enough gold
+                }
+                else if (u.getButton(0).getPrice() > p.getGold())
+                    u.getButton(0).ToggleLock(); //this should lock it if the player doesn't have enough gold
+                
+                if (u.getButton(0).Input()){
+                    w.LevelUp();
+                    p.giveGold(-(u.getButton(0).getPrice()));
+                }
+            }
+        }
+        //Evolve Button
+        if (u.isNull(1))
+            return;
         
-    }
-    //Evolve Button
-    if (u.isNull(1))
-        return;
-    
-    u.getButton(1).setPrice(10); //EvoPrice
-    u.getButton(1).setText("Evolve");
+        u.getButton(1).setPrice(10); //EvoPrice
+        u.getButton(1).setText("Evolve");
 
 
-    if (u.getButton(1).isLocked()){
-        if (u.getButton(1).getPrice() <= p.getXP())
+        if (u.getButton(1).isLocked()){
+            if (u.getButton(1).getPrice() <= p.getXP())
+                u.getButton(1).ToggleLock();
+        }
+        else if (u.getButton(1).getPrice() > p.getXP())
             u.getButton(1).ToggleLock();
-    }
-    else if (u.getButton(1).getPrice() > p.getXP())
-        u.getButton(1).ToggleLock();
 
-    if (u.getButton(1).Input()){
-        p.giveXp(-(u.getButton(1).getPrice()));
-        p.Evolve();
-    }
-    //Medkit Button
-    if (u.isNull(2))
-        return;
-    
-    u.getButton(2).setPrice(MedkitPrice);
-    u.getButton(2).setText("GET MEDKIT (+15hp)");
+            if (u.getButton(1).Input()){
+                p.giveXp(-(u.getButton(1).getPrice()));
+                p.Evolve();
+        }
+        //Medkit Button
+        if (u.isNull(2))
+            return;
+        
+        u.getButton(2).setPrice(MedkitPrice);
+        u.getButton(2).setText("GET MEDKIT (+15hp)");
 
 
-    if (u.getButton(2).isLocked()){
-        if (u.getButton(2).getPrice() <= p.getGold())
+        if (u.getButton(2).isLocked()){
+            if (u.getButton(2).getPrice() <= p.getGold())
+                u.getButton(2).ToggleLock();
+        }
+        else if (u.getButton(2).getPrice() > p.getGold()){
             u.getButton(2).ToggleLock();
-    }
-    else if (u.getButton(2).getPrice() > p.getGold())
-        u.getButton(2).ToggleLock();
 
-    if (u.getButton(2).Input()&& p.getHealth() < 100.0f){
-        MedkitPrice += 10;
-        p.giveGold(-(u.getButton(2).getPrice()));
-        p.Heal(15);
+            if (u.getButton(2).Input()&& p.getHealth() < 100.0f){
+                MedkitPrice += 10;
+                p.giveGold(-(u.getButton(2).getPrice()));
+                p.Heal(15);
+            }
+        }
+    }
+    else if (p.getEvolving()){ //I use the if cuz it might just have switched and I don't wanna do both. I have no idea if that actually changes anything, but I don't wanna find out.
+        for(int i = 0 ; i < p.getNext().size() ; ++i){ //Ok, this is gonna be intense, just focus Joseph, focus.
+            if (evoUi.isNull(i))
+                continue;
+            evoUi.getButton(i).setText(std::format("Evolve into {}", SpeciesToString(p.getNext()[i])));
+
+            if (evoUi.getButton(i).Input()){
+                p.Evolve(i);
+                break;
+            }
+
+            evoUi.getButton(i).setPrice(0);
+        }
     }
 }
 
@@ -341,4 +365,48 @@ std::vector<EvoData> Game::ReadEvoData(){
         V.push_back(ED);
     }
     return V;
+}
+
+const char* Game::SpeciesToString(Species S) const{
+    switch (S){
+        case Species::Amphibian:
+            return "Amphibian";
+        case Species::Bird:
+            return "Bird";
+        case Species::Bush:
+            return "Bush";
+        case Species::Canine:
+            return "Canine";
+        case Species::Crocodile:
+            return "Crocodile";
+        case Species::Feline:
+            return "Feline";
+        case Species::Fungus:
+            return "Fungus";
+        case Species::Fish:
+            return "Fish";
+        case Species::Flower:
+            return "Flower";
+        case Species::Grass:
+            return "Grass";
+        case Species::Mold:
+            return "Mold";
+        case Species::Mushroom:
+            return "Mushroom";
+        case Species::Mycellium:
+            return "Mycellium";
+        case Species::Primate:
+            return "Primate";
+        case Species::Shark:
+            return "Shark";
+        case Species::Single_Cell:
+            return "Single Cell";
+        case Species::Snake:
+            return "Snake";
+        case Species::Tree:
+            return "Tree";
+        case Species::Weed:
+            return "Weed";
+    }
+    return "";
 }

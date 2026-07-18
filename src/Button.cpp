@@ -5,7 +5,6 @@ Button::Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<w
                                                   text(text),
                                                   hovered(false),
                                                   locked(false),
-                                                  WasClicked(false),
                                                   Price(0),
                                                   goldCurrency(goldCurrency),
                                                   VWS(VWS),
@@ -19,12 +18,9 @@ bool Button::Update(){
     return hovered;
 }
 bool Button::Input(){
-    if (hovered && IsMouseButtonDown(MOUSE_BUTTON_LEFT) && !locked && !WasClicked){
-        WasClicked = true;
+    if (hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !locked){
         return true;
     }
-    if (IsMouseButtonUp(MOUSE_BUTTON_LEFT))
-        WasClicked = false;
     return false;
 }
 void Button::ToggleLock(){

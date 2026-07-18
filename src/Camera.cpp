@@ -3,34 +3,53 @@
 #include "WeaponData.hpp"
 #include <cmath>
 namespace jtodd{
-    Camera::Camera(Player& p, std::vector<Bullet>& Bullets, Textures& T, ui& u, Weapon& w, std::vector<weaponStat>& VWS, std::vector<Npc>& Npcs) : p(p),
+    Camera::Camera(Player& p, std::vector<Bullet>& Bullets, Textures& T, ui& u, ui& evoUi, Weapon& w, std::vector<weaponStat>& VWS, std::vector<Npc>& Npcs) : p(p),
                                                                                   Bullets(Bullets),
                                                                                   T(T),
                                                                                   Background(T.Background),
                                                                                   u(u),
                                                                                   w(w),
                                                                                   VWS(VWS),
-                                                                                  Npcs(Npcs)
+                                                                                  Npcs(Npcs),
+                                                                                  evoUi(evoUi)
 
     {
     }
 
     void Camera::Draw_All(){
         bool check = true;
-        for (int i = 0 ; i < 4 ; ++i){
-            if (!u.isNull(i)){
-                bool hovered = u.getButton(i).Update();
-                if(hovered && !u.getButton(i).isLocked()){
-                    SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
-                    check = false;
-                }
-                else if (hovered){
-                    SetMouseCursor(MOUSE_CURSOR_NOT_ALLOWED);
-                    check = false;
-                }
+        if (!p.getEvolving()){
+            for (int i = 0 ; i < 4 ; ++i){
+                if (!u.isNull(i)){
+                    bool hovered = u.getButton(i).Update();
+                    if(hovered && !u.getButton(i).isLocked()){
+                        SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
+                        check = false;
+                    }
+                    else if (hovered){
+                        SetMouseCursor(MOUSE_CURSOR_NOT_ALLOWED);
+                        check = false;
+                    }
 
+                }
             }
         }
+        else{
+            for (int i = 0 ; i < 4 ; ++i){
+                if (!evoUi.isNull(i)){
+                    bool hovered = evoUi.getButton(i).Update();
+                    if(hovered && !evoUi.getButton(i).isLocked()){
+                        SetMouseCursor(MOUSE_CURSOR_POINTING_HAND);
+                        check = false;
+                    }
+                    else if (hovered){
+                        SetMouseCursor(MOUSE_CURSOR_NOT_ALLOWED);
+                        check = false;
+                    }
+
+                }
+            }
+    }
         if (check)
             SetMouseCursor(MOUSE_CURSOR_ARROW);
 
@@ -48,14 +67,24 @@ namespace jtodd{
             for (Bullet& b : Bullets)
                 b.Draw(WorldToScreen(b.getPos()), VWS[w.getak_number()-1].T == type::Knife || VWS[w.getak_number()-1].T == type::Bow || VWS[w.getak_number()-1].T == type::Crossbow);
             //everything else doesn't care abt player
-            u.Draw();
+
+            if (!p.getEvolving()) u.Draw();
+            else evoUi.Draw();
 
             DrawRecPointingAtMouse();
-            
-            for (int i = 0 ; i< 4 ; ++i){
-                if (u.isNull(i))
-                    continue;
-                u.getButton(i).Draw();
+            if (!p.getEvolving()){
+                for (int i = 0 ; i< 4 ; ++i){
+                    if (u.isNull(i))
+                        continue;
+                    u.getButton(i).Draw();
+                }
+            }
+            else{
+                for (int i = 0 ; i< 4 ; ++i){
+                    if (evoUi.isNull(i))
+                        continue;
+                    evoUi.getButton(i).Draw();
+                }
             }
             
             u.PrintStats();

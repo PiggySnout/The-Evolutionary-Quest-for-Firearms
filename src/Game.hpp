@@ -34,6 +34,7 @@ public:
 
     void manageButtons();
 
+    const char* SpeciesToString(Species S) const;
 
 private:
 
@@ -47,6 +48,7 @@ private:
     std::vector<EvoData> EvoStats;
     Textures T;
     ui u;
+    ui evoUi;
     Player p;
     std::vector<Bullet> Bullets;
     

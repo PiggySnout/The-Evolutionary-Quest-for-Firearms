@@ -40,12 +40,22 @@ public:
     void Heal(float a);
 
     bool Evolve();
+    void Evolve(int choice);
     
     float getMaxHealth() const;
+
+    const EvoData& findInEvoStats(Species S, int i);
+
+    bool getEvolving() const;
+
+    std::vector<Species> getNext() const;
+
+    void setTextureFor(Species S);
 
 private:
 
 
+    std::vector<Species> Next;
     std::vector<EvoData>& EvoStats;
     Species S;
     Texture2D* texture1;
@@ -53,6 +63,7 @@ private:
     Texture2D* texture1_death;
     Texture2D* texture2_death;
     float x, y;
+    bool evolving;
     
     bool textureToUse;
     float speed;
