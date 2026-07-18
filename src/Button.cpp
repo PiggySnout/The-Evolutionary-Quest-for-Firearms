@@ -1,7 +1,8 @@
 #include "Button.hpp"
 #include <raylib.h>
+#include <raymath.h>
 #include <format>
-Button::Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<weaponStat>& VWS, int ak_number, bool isWeaponButton) : rec(rec),
+Button::Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<weaponStat>& VWS, int ak_number, bool isWeaponButton, bool has_EvolveButtons, Texture2D* T = nullptr) : rec(rec),
                                                   text(text),
                                                   hovered(false),
                                                   locked(false),
@@ -9,7 +10,9 @@ Button::Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<w
                                                   goldCurrency(goldCurrency),
                                                   VWS(VWS),
                                                   ak_number(ak_number),
-                                                  isWeaponButton(isWeaponButton)
+                                                  isWeaponButton(isWeaponButton),
+                                                  has_EvolveButtons(has_EvolveButtons),
+                                                  T(T)
 
 {                               
 }
@@ -33,6 +36,33 @@ void Button::Draw(){
         DrawRectangleRounded(rec, 0.0f, 10, GRAY);
     DrawText(text.c_str(), rec.x, rec.y + rec.height , 20, WHITE);
 
+    if (has_EvolveButtons){
+        if (T != nullptr){
+            Vector2 WH{
+                static_cast<float>(T->width),
+                static_cast<float>(T->height)
+            };
+            WH = Correct(WH);
+
+            Rectangle Src{
+                0,
+                0,
+                static_cast<float>(T->width),
+                static_cast<float>(T->height)
+            };
+
+            Rectangle Dest{
+                rec.x + rec.width/2 - WH.x/2,
+                rec.y + rec.height/2 - WH.y/2,
+                WH.x,
+                WH.y
+            };
+
+            DrawTexturePro(*T, Src, Dest, {0,0}, 0.0f, WHITE);
+            //ok so once I manage to somehow give the right texture to the button, it should work.
+        }
+        return;
+    }
     std::string PriceStr = std::format("  {}\n  {}", Price, (goldCurrency ? "Gold" : "Xp"));
 
     DrawText(PriceStr.c_str(), rec.x, rec.y + rec.height/2 - 20 , 20, goldCurrency ? GOLD : GREEN);
@@ -92,4 +122,16 @@ void Button::LevelUp() {
 
 int Button::getAk_number() {
     return ak_number;
+}
+
+Vector2 Button::Correct(Vector2 V) const{
+
+    float proportionW = T->width / 100.0f;
+    float proportionH = T->height / 90.0f;
+
+    float scale = proportionW > proportionH ? proportionW : proportionH;
+    scale = 1.0f / scale;
+    V = Vector2Scale(V, scale);
+
+    return V;
 }

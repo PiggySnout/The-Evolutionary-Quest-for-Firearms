@@ -4,24 +4,22 @@
 #include <memory>
 #include<cassert>
 #include <iostream>
-ui::ui(Player& player, Weapon& weapon, std::vector<weaponStat>& VWS)  : T(LoadTexture(ASSETS_PATH"Left_Edge.png")),
-           T2(LoadTexture(ASSETS_PATH"Middle_Piece.png")),
-           T3(LoadTexture(ASSETS_PATH"Right_Edge.png")),
+ui::ui(Player& player, Weapon& weapon, std::vector<weaponStat>& VWS, Textures& textures, bool has_WeaponButton, bool has_EvolveButtons)  : T(textures.Left_Ui),
+           T2(textures.Middle_Ui),
+           T3(textures.Right_Ui),
            player(player),
            weapon(weapon),
            BarLength(GetScreenWidth()),
            BarProgressPercent(0.0f),
            BarTime(weapon.getReloadTime()),
            VWS(VWS),
-           HealthBarLength(GetScreenWidth() * 0.75f)
+           HealthBarLength(GetScreenWidth() * 0.75f),
+           has_WeaponButton(has_WeaponButton),
+           has_EvolveButtons(has_EvolveButtons),
+           textures(textures)
 {
 }
 
-ui::~ui(){
-    UnloadTexture(T);
-    UnloadTexture(T2);
-    UnloadTexture(T3);
-}
 void ui::Draw(){ //This means draw the box
     Vector2 pos { 0, GetScreenHeight() - 220.0f  };
     DrawTextureEx(T, pos, 0.0f, 10.0f, WHITE);
@@ -44,7 +42,10 @@ void ui::newButton(const char* text, bool goldCurrency){
                 (GetScreenWidth()-100.0f) / 4.0f - 10.0f,
                 100.0f
             };
-            buttons[i] = std::make_unique<Button>(rec, text, goldCurrency, VWS, weapon.getak_number(), i == 0);
+            if (player.getNext().size() <= i)
+                buttons[i] = std::make_unique<Button>(rec, text, goldCurrency, VWS, weapon.getak_number(), i == 0 && has_WeaponButton, has_EvolveButtons, nullptr);
+            else
+                buttons[i] = std::make_unique<Button>(rec, text, goldCurrency, VWS, weapon.getak_number(), i == 0 && has_WeaponButton, has_EvolveButtons, &SpeciesToTexture(player.getNext()[i]));
             break;
         }
     }
@@ -181,4 +182,54 @@ void ui::DrawHealth(){
     DrawRectangle(x_BarPos, 10.0f, HealthBarLength, 30, RED);
     DrawRectangle(x_BarPos, 10.0f, player.getHealth()/player.getMaxHealth() * HealthBarLength, 30, GREEN);
     DrawText(TextFormat("Hp: %d", static_cast<int>(player.getHealth())), GetScreenWidth() / 2 - 10, 50, 20, RED);
+}
+
+Texture2D& ui::SpeciesToTexture(Species S) const{
+    switch (S){
+        case Species::Amphibian:
+            return textures.Amphibian_1;
+        case Species::Bird:
+            return textures.Bird_1;
+        case Species::Bush:
+            return textures.Bush_1;
+        case Species::Canine:
+            return textures.Canine_1;
+        case Species::Crocodile:
+            return textures.Crocodile_1;
+        case Species::Feline:
+            return textures.Feline_1;
+        case Species::Fungus:
+            return textures.Fungus_1;
+        case Species::Grass:
+            return textures.Grass_1;
+        case Species::Human:
+            return textures.Human_1;
+        case Species::Late_Dinosaur:
+            return textures.Late_Dinosaur_1;
+        case Species::Mold:
+            return textures.Mould_1;
+        case Species::Rat:
+            return textures.Rat_1;
+        case Species::Shark:
+            return textures.Shark_1;
+        case Species::Single_Cell:
+            return textures.Single_Cell_1;
+        case Species::Mushroom:
+            return textures.Mushroom_1;
+        case Species::Mycellium:
+            return textures.Mycellium_1;
+        case Species::Primate:
+            return textures.Primate_1;
+        case Species::Flower:
+            return textures.Flower_1;
+        case Species::Snake:
+            return textures.Snake_1;
+        case Species::Tree:
+            return textures.Tree_1;
+        case Species::Weed:
+            return textures.Weed_1;
+        case Species::Fish:
+            return textures.Fish_1;
+    }
+    return textures.Single_Cell_2_Death; //default case, should never happen
 }

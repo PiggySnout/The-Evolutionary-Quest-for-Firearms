@@ -6,7 +6,7 @@
 class Button{
 
 public:
-    Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<weaponStat>& VWS, int ak_number, bool isWeaponButton);
+    Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<weaponStat>& VWS, int ak_number, bool isWeaponButton, bool has_EvolveButtons, Texture2D* T);
     bool Update();
     bool Input();
     void Draw();
@@ -23,6 +23,7 @@ public:
 
     int getAk_number();
 
+    Vector2 Correct(Vector2 V) const;
 
 private:
     std::string text; //cannot be const, we wanna change it
@@ -34,10 +35,12 @@ private:
 
     int Price;
 
-    bool goldCurrency;
+    const bool goldCurrency;
+    const bool has_EvolveButtons;
 
     std::vector<weaponStat>& VWS;
 
     int ak_number;
+    Texture2D* T;
     
 };

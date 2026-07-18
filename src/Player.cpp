@@ -175,6 +175,7 @@ bool Player::Evolve(){
         texture2 = &T.Single_Cell_2;
         texture1_death = &T.Single_Cell_1_Death;
         texture2_death = &T.Single_Cell_2_Death;
+        Next = {Species::Fungus, Species::Weed, Species::Fish};
         return false;
     }
     if (S != findInEvoStats(S, evo_level).species){ //Species change (evo_level is the next level)

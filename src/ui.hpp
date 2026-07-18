@@ -8,8 +8,7 @@
 class ui{
 public:
 
-    ui(Player& player, Weapon& weapon, std::vector<weaponStat>& VWS);
-    ~ui();
+    ui(Player& player, Weapon& weapon, std::vector<weaponStat>& VWS, Textures& textures, bool has_WeaponButton, bool has_EvolveButtons);
     void Draw();
     void Input();
     void newButton(const char* text, bool goldCurrency);
@@ -31,9 +30,13 @@ public:
 
     void DrawHealth();
 
+    Texture2D& SpeciesToTexture(Species S) const;
+
     
     
 private:
+
+    Textures& textures;
 
     Texture2D T;
     Texture2D T2;
@@ -51,4 +54,7 @@ private:
     float HealthBarLength;
 
     std::vector<weaponStat>& VWS;
+
+    const bool has_WeaponButton;
+    const bool has_EvolveButtons;
 };

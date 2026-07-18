@@ -9,12 +9,12 @@ Game::Game() : level(0),
                p(T, EvoStats),
                w(T, WeaponStats),
                C(p, Bullets, T, u, evoUi, w, WeaponStats, Npcs),
-               u(p, w, WeaponStats),
+               u(p, w, WeaponStats, T, true, false),
                WeaponStats(ReadStats()),
                EvoStats(ReadEvoData()),
                timer(-1),
                MedkitPrice(10),
-               evoUi(p, w, WeaponStats)
+               evoUi(p, w, WeaponStats, T, false, true)
                
                
 {
@@ -236,16 +236,14 @@ void Game::manageButtons(){
             u.getButton(0).setText(std::format("UNLOCK LVL {}", w.getak_number()+1));
             u.getButton(0).setPrice(WeaponStats[w.getak_number()].price); //don't use -1 because we want the next weapon's price
             if (u.getButton(0).isLocked()){
-                if (u.getButton(0).getPrice() <= p.getGold()){
+                if (u.getButton(0).getPrice() <= p.getGold())
                     u.getButton(0).ToggleLock(); //unlock if the player has enough gold
-                }
-                else if (u.getButton(0).getPrice() > p.getGold())
-                    u.getButton(0).ToggleLock(); //this should lock it if the player doesn't have enough gold
-                
-                if (u.getButton(0).Input()){
-                    w.LevelUp();
-                    p.giveGold(-(u.getButton(0).getPrice()));
-                }
+            }
+            else if (u.getButton(0).getPrice() > p.getGold())
+                u.getButton(0).ToggleLock(); //this should lock it if the player doesn't have enough gold
+            if (u.getButton(0).Input()){
+                w.LevelUp();
+                p.giveGold(-(u.getButton(0).getPrice()));
             }
         }
         //Evolve Button
