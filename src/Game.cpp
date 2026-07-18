@@ -71,7 +71,7 @@ bool Game::Logic(){
         i.UpdatePlayerPos(TruePos);
         i.UpdatePlayerSize(p.getTextureDim());
         if (i.CheckPlayerCollision()){
-            p.TakeDamage(i.getDamage() * (i.getAI() == AIType::Ambush ? 1.2f : 1.0f));
+            p.TakeDamage(i.getDamage() * (i.getAI() == AIType::Ambush ? 1.5f : 1.0f));
         }
         i.Move();
         
@@ -79,22 +79,16 @@ bool Game::Logic(){
     
 
     killBullets();
-    
 
     killNpcs();
-    
 
     manageButtons();
-    
 
     u.EvalCursor();
     
-
     if (IsKeyDown(KEY_P) && IsKeyDown(KEY_I) && IsKeyPressed(KEY_G))
         LevelUp();
-
-    if (IsKeyDown(KEY_Z) && IsKeyDown(KEY_N) && IsKeyDown(KEY_O) &&IsKeyDown(KEY_U) && IsKeyPressed(KEY_T))
-        p.Evolve();
+    
     SpawnEnemies();
     
     return false;
@@ -227,6 +221,7 @@ void Game::killBullets(){
 }
 
 void Game::manageButtons(){
+    std::cout << u.isNull(0) << u.isNull(1) << u.isNull(2) << '\n';
     if (!p.getEvolving()){
         if (w.getak_number() == 47)
             u.deleteButton(0);
@@ -261,9 +256,9 @@ void Game::manageButtons(){
         else if (u.getButton(1).getPrice() > p.getXP())
             u.getButton(1).ToggleLock();
 
-            if (u.getButton(1).Input()){
-                p.giveXp(-(u.getButton(1).getPrice()));
-                p.Evolve();
+        if (u.getButton(1).Input()){
+            p.giveXp(-(u.getButton(1).getPrice()));
+            p.Evolve();
         }
         //Medkit Button
         if (u.isNull(2))
@@ -287,7 +282,8 @@ void Game::manageButtons(){
             }
         }
     }
-    else if (p.getEvolving()){ //I use the if cuz it might just have switched and I don't wanna do both. I have no idea if that actually changes anything, but I don't wanna find out.
+    else if (p.getEvolving()){ //I use the if cuz it might just have switched and I don't wanna do both. I have no idea if that actually changes anything, but I don't wanna find out. I just reaslised it changes nothing lol. Still leaving it cuz it changes nothing.
+        
         for(int i = 0 ; i < p.getNext().size() ; ++i){ //Ok, this is gonna be intense, just focus Joseph, focus.
             if (evoUi.isNull(i))
                 continue;
@@ -295,6 +291,12 @@ void Game::manageButtons(){
 
             if (evoUi.getButton(i).Input()){
                 p.Evolve(i);
+                if (p.getNext().empty()){
+                    for (int j = 0 ; j < 3 ; ++j)
+                        evoUi.deleteButton(j);
+                    u.deleteButton(1);
+                    p.StopEvol();
+                }
                 break;
             }
 

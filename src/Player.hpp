@@ -52,6 +52,10 @@ public:
 
     void setTextureFor(Species S);
 
+    void StopEvol();
+
+    int getEvo_Level() const;
+
 private:
 
 

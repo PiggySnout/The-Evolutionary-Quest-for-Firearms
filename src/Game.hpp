@@ -47,14 +47,16 @@ private:
     std::vector<weaponStat> WeaponStats;
     std::vector<EvoData> EvoStats;
     Textures T;
+    Player p;
+    Weapon w;
     ui u;
     ui evoUi;
-    Player p;
+    
     std::vector<Bullet> Bullets;
     
     std::vector<Npc> Npcs;
     std::time_t last;
-    Weapon w;
+    
 
     
 

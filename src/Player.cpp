@@ -11,7 +11,7 @@ Player::Player(Textures& T, std::vector<EvoData>& EvoStats) :
     textureToUse(false),
     speed(EvoStats[0].speed),
     xp(100000000),
-    gold(0),
+    gold(100000000),
     hp(100.0f),
     max_hp(100.0f),
     damageTimer(0),
@@ -403,4 +403,12 @@ void Player::setTextureFor(Species S){
             Next = {Species::Bush, Species::Flower, Species::Grass};
             break;
     }
+}
+
+void Player::StopEvol(){
+    evolving = false;
+}
+
+int Player::getEvo_Level() const{
+    return evo_level;
 }
