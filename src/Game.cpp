@@ -20,7 +20,7 @@ Game::Game() : level(0),
                lastEvoOptionCount(-1),
                paused(false),
                Levels(ReadLevels()),
-               mob_cap(Levels[level].getMob_cap())
+               mob_cap(Levels[0].getMob_cap())
                
                
 {
@@ -33,6 +33,18 @@ Game::Game() : level(0),
 }
 
 bool Game::Logic(){
+    if (w.getak_number() == 48){
+        if (timer == -1)
+            timer = 300;
+        if (timer != 0){
+            DrawRectangle(0,0, GetScreenWidth(), GetScreenHeight(), Fade(GREEN, 0.6f));
+            DrawText("You WIN", GetScreenWidth()/2 - 20, GetScreenHeight()/2 - 150, 40, WHITE);
+        }
+        if (timer-- == 0){
+            CloseWindow();
+            return true;
+        }
+    }
     if (!p.IsDead()){
         if (p.KillIfNec()){
             timer = 300;
@@ -231,12 +243,15 @@ void Game::killBullets(){
 
 void Game::manageButtons(){
     if (!p.getEvolving()){
-        if (w.getak_number() == 47)
+        if (w.getak_number() == 48)
             u.deleteButton(0);
 
         //Weapon Upgrade Button
         if (!u.isNull(0)){
-            u.getButton(0).setText(std::format("UNLOCK LVL {}", w.getak_number()+1));
+            if (w.getak_number() + 1 != 48)
+                u.getButton(0).setText(std::format("UNLOCK LVL {}", w.getak_number()+1));
+            else
+                u.getButton(0).setText(std::format("WIN!!!", w.getak_number()+1));
             u.getButton(0).setPrice(WeaponStats[w.getak_number()].price); //don't use -1 because we want the next weapon's price
             if (u.getButton(0).isLocked()){
                 if (u.getButton(0).getPrice() <= p.getGold())
@@ -467,41 +482,41 @@ std::vector<Level> Game::ReadLevels(){
         if (Str == "Amphibian")
             S = Species::Amphibian;
         else if (Str == "Bird")
-            S = Species::Bird;
+            S = Species::Snake;
         else if (Str == "Bush")
-            S = Species::Bush;
+            S = Species::Feline;
         else if (Str == "Canine")
-            S = Species::Canine;
+            S = Species::Feline;
         else if (Str == "Crocodile")
             S = Species::Crocodile;
         else if (Str == "Feline")
-            S = Species::Feline;
+            S = Species::Canine;
         else if (Str == "Fungus")
-            S = Species::Fungus;
+            S = Species::Single_Cell;
         else if (Str == "Fish")
             S = Species::Fish;
         else if (Str == "Flower")
-            S = Species::Flower;
+            S = Species::Rat;
         else if (Str == "Grass")
-            S = Species::Grass;
+            S = Species::Rat;
         else if (Str == "Mold")
             S = Species::Mold;
         else if (Str == "Mushroom")
-            S = Species::Mushroom;
+            S = Species::Bird;
         else if (Str == "Mycellium")
             S = Species::Mycellium;
         else if (Str == "Primate")
-            S = Species::Primate;
+            S = Species::Snake;
         else if (Str == "Shark")
-            S = Species::Shark;
+            S = Species::Fish;
         else if (Str == "Single_Cell")
             S = Species::Single_Cell;
         else if (Str == "Snake")
             S = Species::Snake;
         else if (Str == "Tree")
-            S = Species::Tree;
+            S = Species::Primate;
         else if (Str == "Weed")
-            S = Species::Weed;
+            S = Species::Single_Cell;
         else if (Str == "Rat")
             S = Species::Rat;
         else if (Str == "Dinosaur" || Str == "Late_Dinosaur")

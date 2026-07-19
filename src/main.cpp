@@ -4,7 +4,7 @@
 
 
 
-int main() 
+int WinMain() 
 {   
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(900, 600, "The Evolutionary Quest for firearms");

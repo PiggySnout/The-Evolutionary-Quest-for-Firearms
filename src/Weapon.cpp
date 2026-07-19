@@ -24,7 +24,7 @@ void Weapon::LevelUp(){
     std::cout << "Level " << ak_number
           << " type = " << static_cast<int>(VWS[ak_number-1].T)
           << '\n';
-    if (ak_number != 47)
+    if (ak_number != 48)
         ++ak_number;
     else
         return;
