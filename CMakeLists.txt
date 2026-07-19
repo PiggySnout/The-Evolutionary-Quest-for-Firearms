@@ -19,6 +19,7 @@ add_executable(${PROJECT_NAME} #WIN32
     src/Camera.cpp
     src/Weapon.cpp
     src/Npc.cpp
+    src/Level.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 target_compile_definitions(${PROJECT_NAME} PUBLIC DATA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/data/")
