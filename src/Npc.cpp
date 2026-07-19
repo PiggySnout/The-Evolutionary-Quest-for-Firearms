@@ -383,7 +383,7 @@ void Npc::CowardMove(){ //very fast, runs away, if you are far away enough it fo
     } else {
         move = Vector2Scale(Vector2Normalize(toTarget), speed);
     }
-    Pos = Vector2Add(Pos, move);
+    Pos = Vector2Subtract(Pos, move);
     if (move.x < 0 && facingRight && MoveTimer == -1)
         facingRight = false;
     if (move.x > 0 && !facingRight && MoveTimer == -1)
@@ -404,7 +404,7 @@ void Npc::PackMove(){ //aggroes all other Npcs within a certain radius
                 i.Aggro();
         }
     }
-    else if (Vector2Distance(Pos, Destination) < 5.0f){
+    else if (Vector2Distance(Pos, Destination) == 0.0){
         if (MoveTimer == -1)
             MoveTimer = 180;
         else if (MoveTimer <= 0){
@@ -423,10 +423,11 @@ void Npc::PackMove(){ //aggroes all other Npcs within a certain radius
     if (dist <= speed * 0.7f || dist < 0.001f) {
         // close enough — snap to it instead of overshooting
         move = toTarget;
-    } else {
+    } 
+    else {
         move = Vector2Scale(Vector2Normalize(toTarget), speed * 0.7f);
     }
-    Pos = Vector2Add(Pos, move);
+    Pos = Vector2Subtract(Pos, move);
     if (move.x < 0 && facingRight && MoveTimer == -1)
         facingRight = false;
     if (move.x > 0 && !facingRight && MoveTimer == -1)

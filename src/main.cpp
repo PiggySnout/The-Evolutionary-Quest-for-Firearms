@@ -23,14 +23,15 @@ int main()
     }
 
     SetMouseCursor(MOUSE_CURSOR_ARROW);
+    if (inputReturn == 1){
+        BeginDrawing();
+        ClearBackground(BLACK);
+        DrawText("Loading...", GetScreenWidth() / 2 - 100, GetScreenHeight()/2 - 15, 30, WHITE);
+        EndDrawing();
 
-    BeginDrawing();
-    ClearBackground(BLACK);
-    DrawText("Loading...", GetScreenWidth() / 2 - 100, GetScreenHeight()/2 - 15, 30, WHITE);
-    EndDrawing();
-
-    InitAudioDevice();
-    SetExitKey(KEY_NULL);
+        InitAudioDevice();
+        SetExitKey(KEY_NULL);
+    }
     Game g;
     
 

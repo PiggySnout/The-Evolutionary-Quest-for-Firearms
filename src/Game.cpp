@@ -118,8 +118,8 @@ void Game::NextLevel(){
 }
 
 void Game::SpawnEnemies(){
-    const float WORLD_WIDTH  = 138 * 20.0f;
-    const float WORLD_HEIGHT = 138 * 20.0f;
+    const float WORLD_WIDTH  = 75 * 20.0f;
+    const float WORLD_HEIGHT = 75 * 20.0f;
 
     const float HALF_PLAYER_W = 9.0f / 2.0f;
     const float HALF_PLAYER_H = 10.0f / 2.0f;
@@ -141,7 +141,7 @@ void Game::SpawnEnemies(){
 
         AIType A = static_cast<AIType>(GetRandomValue(0, 4));
 
-        Npc N(T, Levels[level].getNpctype(), NpcPos, p.findInEvoStats(Levels[level].getNpctype(), Levels[level].getNpc_evo_level() - 1).health / 10, Levels[level].getNpcGoldDrop(), Levels[level].getNpcXpDrop(), p.findInEvoStats(Levels[level].getNpctype(), Levels[level].getNpc_evo_level() - 1).speed * 0.8f, 1.0f, A, &Npcs);
+        Npc N(T, Levels[level].getNpctype(), NpcPos, p.findInEvoStats(Levels[level].getNpctype(), Levels[level].getNpc_evo_level() - 1).health / 7, Levels[level].getNpcGoldDrop(), Levels[level].getNpcXpDrop(), p.findInEvoStats(Levels[level].getNpctype(), Levels[level].getNpc_evo_level() - 1).speed * 0.8f, 1.0f, A, &Npcs);
         
         Npcs.push_back(N);
     }

@@ -58,6 +58,8 @@ public:
 
     Species getSpecies() const;
 
+    float getSpeed() const;
+
 private:
 
 

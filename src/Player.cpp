@@ -211,7 +211,6 @@ void Player::Evolve(int choice){
     const EvoData& E = findInEvoStats(S, 0);
     evo_level = 1; 
     max_hp = E.health;
-    hp = E.health;
     speed = E.speed;
     passiveXp = E.passive_xp;
     passiveGold = E.passive_gold;
@@ -420,4 +419,8 @@ int Player::getEvo_Level() const{
 
 Species Player::getSpecies() const{
     return S;
+}
+
+float Player::getSpeed() const{
+    return speed;
 }

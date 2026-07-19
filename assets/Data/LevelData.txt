@@ -1,1 +1,27 @@
-Single_Cell 20 10 10 5 5 1
+Single_Cell	8	5	15	10	20	1
+
+Fungus	10	10	25	20	40	2
+Weed	10	10	25	20	40	2
+Fish	10	10	25	20	40	2
+
+Mushroom	12	20	45	40	80	3
+Mycellium	12	20	45	40	80	3
+Mold	12	20	45	40	80	3
+Bush	12	20	45	40	80	3
+Flower	12	20	45	40	80	3
+Grass	12	20	45	40	80	3
+Shark	12	20	45	40	80	3
+Amphibian	12	20	45	40	80	3
+
+Tree	15	40	90	80	160	4
+Rat	15	40	90	80	160	4
+Crocodile	15	40	90	80	160	4
+
+Feline	18	80	180	160	320	5
+Canine	18	80	180	160	320	5
+Primate	18	80	180	160	320	5
+Snake	18	80	180	160	320	5
+Late_Dinosaur	18	80	180	160	320	5
+Bird	18	80	180	160	320	5
+
+Human	20	150	350	300	600	6

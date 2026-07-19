@@ -4,6 +4,7 @@
 #include <memory>
 #include<cassert>
 #include <iostream>
+#include <format>
 ui::ui(Player& player, Weapon& weapon, std::vector<weaponStat>& VWS, Textures& textures, bool has_WeaponButton, bool has_EvolveButtons)  : T(textures.Left_Ui),
            T2(textures.Middle_Ui),
            T3(textures.Right_Ui),
@@ -187,7 +188,9 @@ void ui::DrawHealth(){
 
     DrawRectangle(x_BarPos, 10.0f, HealthBarLength, 30, RED);
     DrawRectangle(x_BarPos, 10.0f, player.getHealth()/player.getMaxHealth() * HealthBarLength, 30, GREEN);
-    DrawText(TextFormat("Hp: %d", static_cast<int>(player.getHealth())), GetScreenWidth() / 2 - 10, 50, 20, RED);
+    DrawText(TextFormat("Hp: %d", static_cast<int>(player.getHealth())), GetScreenWidth() / 2 - 150, 50, 20, RED);
+    DrawText(std::format("EvoLvl: {}", player.getEvo_Level()).c_str(), GetScreenWidth() / 2 - 25, 50, 20, YELLOW);
+    DrawText(std::format("SPD: {}", player.getSpeed()).c_str(), GetScreenWidth() / 2 + 100, 50, 20, DARKBLUE);
 }
 
 Texture2D& ui::SpeciesToTexture(Species S) const{
