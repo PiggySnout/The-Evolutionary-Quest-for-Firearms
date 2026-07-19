@@ -9,7 +9,7 @@ set(BUILD_GAMES    OFF CACHE BOOL "" FORCE) # or games
 
 add_subdirectory(libs/raylib EXCLUDE_FROM_ALL)
 
-add_executable(${PROJECT_NAME} WIN32
+add_executable(${PROJECT_NAME} #WIN32
     src/main.cpp
     src/Player.cpp
     src/ui.cpp
@@ -23,9 +23,9 @@ add_executable(${PROJECT_NAME} WIN32
     src/MainMenu.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
-target_compile_definitions(${PROJECT_NAME} PUBLIC DATA_PATH="../../assets/data/")
-target_compile_definitions(${PROJECT_NAME} PUBLIC SOUND_PATH="../../assets/sound/")
-target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="../../assets/textures/") # Set the asset path macro to the absolute path on the dev machine
+#target_compile_definitions(${PROJECT_NAME} PUBLIC DATA_PATH="assets/data/")
+#target_compile_definitions(${PROJECT_NAME} PUBLIC SOUND_PATH="assets/sound/")
+#target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="assets/textures/") # Set the asset path macro to the absolute path on the dev machine
 
 target_include_directories(GameJam
     SYSTEM PRIVATE

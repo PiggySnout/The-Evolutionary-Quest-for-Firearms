@@ -1,5 +1,4 @@
 #include "Bullet.hpp"
-
 Bullet::Bullet() : damage(0),
                    pos({0,0}),
                    Velocity({0,0})

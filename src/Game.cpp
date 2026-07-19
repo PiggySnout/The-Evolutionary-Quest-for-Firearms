@@ -1,3 +1,4 @@
+#include "path_funcs.hpp"
 #include "Game.hpp"
 #include "raymath.h"
 #include <iostream>
@@ -161,7 +162,7 @@ void Game::SpawnEnemies(){
 
 std::vector<weaponStat> Game::ReadStats(){
     std::vector<weaponStat> V{};
-    std::ifstream FILE(DATA_PATH"WeaponStats.txt");
+    std::ifstream FILE(GetDataPath("WeaponStats.txt"));
     if (!FILE){
         std::cout << "ERROR: Failed to open WeaponStats.txt\n";
         return V;
@@ -193,6 +194,8 @@ std::vector<weaponStat> Game::ReadStats(){
             case 6:
                 T = type::AK_47;
                 break;
+            //default:
+            //    T = type::Rock; //hopefully this doesn't happen
         }
         weaponStat WS(T, damage, speed, range, rechargeTime, price);
         V.push_back(WS);
@@ -346,7 +349,7 @@ void Game::manageButtons(){
 
 std::vector<EvoData> Game::ReadEvoData(){
     std::vector<EvoData> V{};
-    std::ifstream FILE(DATA_PATH"EvolutionStats.txt");
+    std::ifstream FILE(GetDataPath("EvolutionStats.txt"));
     if (!FILE){
         std::cout << "ERROR: Failed to open EvolutionStats.txt\n";
         return V;
@@ -472,9 +475,9 @@ std::vector<Level> Game::ReadLevels(){
     int MinGold, MaxGold;
     int MinXp, MaxXp;
     int evo_level;
-    std::ifstream FILE(DATA_PATH"LevelData.txt");
+    std::ifstream FILE(GetDataPath("LevelData.txt"));
     if (!FILE){
-        std::cout << "ERROR: Failed to open WeaponStats.txt\n";
+        std::cout << "ERROR: Failed to open LevelData.txt\n";
         return V;
     } 
     
