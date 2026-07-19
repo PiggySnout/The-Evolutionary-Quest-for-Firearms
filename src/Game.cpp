@@ -16,7 +16,8 @@ Game::Game() : level(0),
                MedkitPrice(10),
                evoUi(p, w, WeaponStats, T, false, true),
                Click(T.Click),
-               lastEvoOptionCount(-1)
+               lastEvoOptionCount(-1),
+               paused(false)
                
                
 {
@@ -46,13 +47,12 @@ bool Game::Logic(){
         }
         return false;
     }
-    if (p.Input() && u.IsbarFull() && w.hasAmmo() || u.AdvanceBar())
-        w.SpawnBullet(p.getPos(), C.ScreenToWorld(GetMousePosition()), Bullets);
     
-    if (u.IsbarFull() && !w.hasAmmo())
-        u.ResetBar();
+    if (IsKeyPressed(KEY_ESCAPE)){
+        paused = !paused;
+    }
     
-    if (!p.getEvolving()){
+    if (!p.getEvolving() && !paused){
         u.DrawButtons();
     }
     else
@@ -62,38 +62,47 @@ bool Game::Logic(){
         p.getPos().y //+ p.getTextureDim().y / 2
     };
     std::time_t now = std::time(nullptr);
-    if (now - last >= 1){
-        p.UpdateTexture();
-        last = std::time(nullptr);
-        for (Npc& i : Npcs)
-            i.UpdatePlayerPos(TruePos);
-    }
-    for (Npc& i : Npcs)
-        i.ChangeTexture();
     
-    for (Npc& i : Npcs){
-        i.UpdatePlayerSize(p.getTextureDim());
-        if (i.CheckPlayerCollision()){
-            p.TakeDamage(i.getDamage() * (i.getAI() == AIType::Ambush ? 1.5f : 1.0f));
+    
+    if (!p.getEvolving() && !paused){
+        if (p.Input() && u.IsbarFull() && w.hasAmmo() || u.AdvanceBar())
+            w.SpawnBullet(p.getPos(), C.ScreenToWorld(GetMousePosition()), Bullets);
+    
+        if (u.IsbarFull() && !w.hasAmmo())
+            u.ResetBar();
+        if (now - last >= 1){
+            p.UpdateTexture();
+            last = std::time(nullptr);
+            for (Npc& i : Npcs)
+                i.UpdatePlayerPos(TruePos);
         }
-        i.Move();
-        
+        for (Npc& i : Npcs){
+            i.UpdatePlayerSize(p.getTextureDim());
+            if (i.CheckPlayerCollision()){
+                p.TakeDamage(i.getDamage() * (i.getAI() == AIType::Ambush ? 1.5f : 1.0f));
+            }
+            i.Move();
+        }
+        killBullets();
+        killNpcs();
+        for (Npc& i : Npcs)
+            i.ChangeTexture();
     }
-    
-
-    killBullets();
-
-    killNpcs();
 
     manageButtons();
-
-    u.EvalCursor();
+    
+    if (p.getEvolving()) evoUi.EvalCursor();
+    else u.EvalCursor();
+    
     
     if (IsKeyDown(KEY_P) && IsKeyDown(KEY_I) && IsKeyPressed(KEY_G))
         LevelUp();
     
     SpawnEnemies();
     
+
+    if (paused)
+        DrawText("Paused...", GetScreenWidth() / 2 - 80, GetScreenHeight() /2 - 140, 40, LIGHTGRAY);
     return false;
 }
 void Game::Draw_all(){
@@ -248,7 +257,12 @@ void Game::manageButtons(){
         if (u.isNull(1))
             return;
         
-        u.getButton(1).setPrice(10); //EvoPrice
+        if (p.findInEvoStats(p.getSpecies(), p.getEvo_Level() - 1).price == -1){
+            u.deleteButton(1);
+            return;
+        }
+
+        u.getButton(1).setPrice(EvoStats[p.getEvo_Level() - 1].price); //EvoPrice
         u.getButton(1).setText("Evolve");
 
 
@@ -308,9 +322,8 @@ void Game::manageButtons(){
                 if (p.getNext().empty()){
                     for (int j = 0 ; j < 4 ; ++j)
                         evoUi.deleteButton(j);
-                    u.deleteButton(1);
                     p.StopEvol();
-                    lastEvoOptionCount = -1;      // reset for the next evolve cycle
+                    lastEvoOptionCount = -1;// reset for the next evolve cycle
                 }
                 break;
             }
@@ -332,7 +345,8 @@ std::vector<EvoData> Game::ReadEvoData(){
     
     float speed, health;
     unsigned int passive_xp, passive_gold;
-    while (FILE>>Str>>speed>>health>>passive_xp>>passive_gold){
+    int Xp_price;
+    while (FILE>>Str>>speed>>health>>passive_xp>>passive_gold>>Xp_price){
         if (Str == "Amphibian")
             S = Species::Amphibian;
         else if (Str == "Bird")
@@ -371,11 +385,17 @@ std::vector<EvoData> Game::ReadEvoData(){
             S = Species::Tree;
         else if (Str == "Weed")
             S = Species::Weed;
+        else if (Str == "Rat")
+            S = Species::Rat;
+        else if (Str == "Dinosaur" || Str == "Late_Dinosaur")
+            S = Species::Late_Dinosaur;
+        else if (Str == "Human")
+            S = Species::Human;
         else{
             std::cout << "ERROR: Invalid species in EvolutionStats.txt\n";
             continue;
         }
-        EvoData ED(S, speed, health, passive_xp, passive_gold);
+        EvoData ED(S, speed, health, passive_xp, passive_gold, Xp_price);
         V.push_back(ED);
     }
     return V;
@@ -393,6 +413,8 @@ const char* Game::SpeciesToString(Species S) const{
             return "Canine";
         case Species::Crocodile:
             return "Crocodile";
+        case Species::Late_Dinosaur:
+            return "Dinosaur";
         case Species::Feline:
             return "Feline";
         case Species::Fungus:
@@ -403,6 +425,8 @@ const char* Game::SpeciesToString(Species S) const{
             return "Flower";
         case Species::Grass:
             return "Grass";
+        case Species::Human:
+            return "Human";
         case Species::Mold:
             return "Mold";
         case Species::Mushroom:
@@ -411,6 +435,8 @@ const char* Game::SpeciesToString(Species S) const{
             return "Mycellium";
         case Species::Primate:
             return "Primate";
+        case Species::Rat:
+            return "Rat";
         case Species::Shark:
             return "Shark";
         case Species::Single_Cell:

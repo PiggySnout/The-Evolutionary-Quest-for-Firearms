@@ -1,36 +1,36 @@
 #pragma once
 enum class Species{
-    Single_Cell, //done
-    Weed, //done
-    Fish, //done
-    Amphibian, //done
-    Fungus, //done
+    Single_Cell, 
+    Weed, 
+    Fish, 
+    Amphibian, 
+    Fungus, 
 
-    Crocodile, //done
-    Rat, //done
-    Mushroom, //done
+    Crocodile, 
+    Rat, 
+    Mushroom, 
     Mycellium,
 
-    Bird, //done
-    Late_Dinosaur, //done
+    Bird, 
+    Late_Dinosaur, 
 
-    Feline, //done
-    Canine, //done
-    Primate, //done
+    Feline, 
+    Canine, 
+    Primate, 
 
-    Human, //done
+    Human, 
 
-    Snake, //done
+    Snake, 
 
-    Grass, //done
+    Grass,
     Flower,
-    Bush, //bush
+    Bush,
 
-    Tree, //done
+    Tree,
 
-    Mold, //done
-    
-    Shark //done
+    Mold,
+
+    Shark
 
 
 };

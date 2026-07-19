@@ -12,8 +12,8 @@ Player::Player(Textures& T, std::vector<EvoData>& EvoStats) :
     speed(EvoStats[0].speed),
     xp(100000000),
     gold(0),
-    hp(100.0f),
-    max_hp(100.0f),
+    hp(42.5f),
+    max_hp(42.5f),
     damageTimer(0),
     dead(false),
     facingRight(true),
@@ -181,11 +181,9 @@ bool Player::Evolve(){
         return false;
     }
     if (S != findInEvoStats(S, evo_level).species){ //Species change (evo_level is the next level)
+        if (Next.empty())
+            return false;
         evolving = true;
-        evo_level = 1; //when I implement it well this'll be evo_level = 1;, but rn I'm just getting it to work. //you did it!
-        //do loads of stuff like buttons for choosing next evolution and shit //done
-        S = findInEvoStats(S, evo_level).species; //get the next species
-        setTextureFor(S);
         return true;
     }
 
@@ -209,7 +207,8 @@ void Player::Evolve(int choice){
     S = Next[choice];
     evolving = false;
     setTextureFor(S);
-    const EvoData& E = findInEvoStats(S, 1);
+    const EvoData& E = findInEvoStats(S, 0);
+    evo_level = 1; 
     max_hp = E.health;
     hp = E.health;
     speed = E.speed;
@@ -265,6 +264,7 @@ void Player::setTextureFor(Species S){
             texture2 = &T.Bird_2;
             texture1_death = &T.Bird_1_Death;
             texture2_death = &T.Bird_2_Death;
+            Next = {};
             break;
         case Species::Bush:
             texture1 = &T.Bush_1;
@@ -285,7 +285,7 @@ void Player::setTextureFor(Species S){
             texture2 = &T.Crocodile_2;
             texture1_death = &T.Crocodile_1_Death;
             texture2_death = &T.Crocodile_2_Death;
-            Next = {Species::Snake};
+            Next = {Species::Snake, Species::Late_Dinosaur, Species::Bird}; //should bird go somewhere else? this might be confusing.
             break;
         case Species::Feline:
             texture1 = &T.Feline_1;
@@ -415,4 +415,8 @@ void Player::StopEvol(){
 
 int Player::getEvo_Level() const{
     return evo_level;
+}
+
+Species Player::getSpecies() const{
+    return S;
 }

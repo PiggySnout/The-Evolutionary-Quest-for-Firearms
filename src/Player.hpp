@@ -56,6 +56,8 @@ public:
 
     int getEvo_Level() const;
 
+    Species getSpecies() const;
+
 private:
 
 

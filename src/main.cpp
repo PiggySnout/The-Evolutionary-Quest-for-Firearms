@@ -9,7 +9,8 @@ int main()
     InitWindow(900, 600, "The Evolutionary Quest for firearms");
     InitAudioDevice();
     SetTargetFPS(60);
-
+    SetExitKey(KEY_NULL);
+    
     Game g;
     
     while (!WindowShouldClose())

@@ -44,6 +44,7 @@ private:
 
     int lastEvoOptionCount;
 
+    bool paused;
     std::vector<weaponStat> WeaponStats;
     std::vector<EvoData> EvoStats;
     Textures T;
