@@ -118,7 +118,6 @@ bool Npc::shouldDespawn() const{
 }
 
 void Npc::UpdatePlayerPos(Vector2 playerPos){
-
     this->playerPos = playerPos;
 }
 void Npc::UpdatePlayerSize(Vector2 playerSize){

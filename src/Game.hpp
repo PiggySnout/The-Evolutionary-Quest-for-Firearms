@@ -42,7 +42,7 @@ private:
     int timer;
     int MedkitPrice;
 
-    
+    int lastEvoOptionCount;
 
     std::vector<weaponStat> WeaponStats;
     std::vector<EvoData> EvoStats;
@@ -57,7 +57,7 @@ private:
     std::vector<Npc> Npcs;
     std::time_t last;
     
-
+    Sound& Click;
     
 
     jtodd::Camera C;

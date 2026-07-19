@@ -42,6 +42,8 @@ private:
     Texture2D T2;
     Texture2D T3;
 
+    Sound click;
+
     std::array<std::unique_ptr<Button>, 4> buttons;
 
     Player& player;

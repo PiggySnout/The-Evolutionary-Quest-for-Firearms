@@ -11,7 +11,7 @@ Player::Player(Textures& T, std::vector<EvoData>& EvoStats) :
     textureToUse(false),
     speed(EvoStats[0].speed),
     xp(100000000),
-    gold(100000000),
+    gold(0),
     hp(100.0f),
     max_hp(100.0f),
     damageTimer(0),
@@ -112,6 +112,8 @@ int Player::getXP() const {
     return xp;
 }
 void Player::giveGold(int gold){
+    if (gold > 0)
+        PlaySound(T.Gold);
     this->gold += gold;
 }
 void Player::giveXp(int xp){
@@ -213,6 +215,8 @@ void Player::Evolve(int choice){
     speed = E.speed;
     passiveXp = E.passive_xp;
     passiveGold = E.passive_gold;
+
+    PlaySound(T.Evolve);
     return;
 }
 

@@ -6,7 +6,7 @@
 class Button{
 
 public:
-    Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<weaponStat>& VWS, int ak_number, bool isWeaponButton, bool has_EvolveButtons, Texture2D* T);
+    Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<weaponStat>& VWS, int ak_number, bool isWeaponButton, bool has_EvolveButtons, Texture2D* T = nullptr);
     bool Update();
     bool Input();
     void Draw();
@@ -22,6 +22,8 @@ public:
     void LevelUp();
 
     int getAk_number();
+
+    void setTexture(Texture2D* a);
 
     Vector2 Correct(Vector2 V) const;
 

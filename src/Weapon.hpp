@@ -23,6 +23,8 @@ public:
     int getPrice() const;
 
     type getType() const;
+
+    Sound WeaponToSound() const;
 private:
     int ak_number;
     Texture2D* texture;

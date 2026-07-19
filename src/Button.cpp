@@ -2,7 +2,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <format>
-Button::Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<weaponStat>& VWS, int ak_number, bool isWeaponButton, bool has_EvolveButtons, Texture2D* T = nullptr) : rec(rec),
+Button::Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<weaponStat>& VWS, int ak_number, bool isWeaponButton, bool has_EvolveButtons, Texture2D* T) : rec(rec),
                                                   text(text),
                                                   hovered(false),
                                                   locked(false),
@@ -14,7 +14,7 @@ Button::Button(Rectangle rec, std::string text, bool goldCurrency, std::vector<w
                                                   has_EvolveButtons(has_EvolveButtons),
                                                   T(T)
 
-{                               
+{
 }
 bool Button::Update(){
     hovered = CheckCollisionPointRec(GetMousePosition(), rec);
@@ -134,4 +134,8 @@ Vector2 Button::Correct(Vector2 V) const{
     V = Vector2Scale(V, scale);
 
     return V;
+}
+
+void Button::setTexture(Texture2D* a){
+    T = a; //point T to the new texture
 }

@@ -14,7 +14,9 @@ Game::Game() : level(0),
                EvoStats(ReadEvoData()),
                timer(-1),
                MedkitPrice(10),
-               evoUi(p, w, WeaponStats, T, false, true)
+               evoUi(p, w, WeaponStats, T, false, true),
+               Click(T.Click),
+               lastEvoOptionCount(-1)
                
                
 {
@@ -22,18 +24,17 @@ Game::Game() : level(0),
     u.newButton("Evolve", false);
     u.newButton("Medkit +10hp", true);
 
-    evoUi.newButton("Evo_choice_1", false);
-    evoUi.newButton("Evo_choice_2", false);
-    evoUi.newButton("Evo_choice_3", false);
-
 
     u.SetBarTime(300);
 }
 
 bool Game::Logic(){
-    if (!p.IsDead())
-        if (p.KillIfNec())
+    if (!p.IsDead()){
+        if (p.KillIfNec()){
             timer = 300;
+            PlaySound(T.Game_Over);
+        }
+    }
     if (p.IsDead()){
         if (timer-- > 0){
             DrawRectangle(0,0, GetScreenWidth(), GetScreenHeight(), Fade(RED, 0.6f));
@@ -56,19 +57,21 @@ bool Game::Logic(){
     }
     else
         evoUi.DrawButtons();
-    std::time_t now = std::time(nullptr);
-    if (now - last >= 1){
-        p.UpdateTexture();
-        last = std::time(nullptr);
-    }
-    for (Npc& i : Npcs)
-        i.ChangeTexture();
     Vector2 TruePos{
         p.getPos().x, //+ p.getTextureDim().x / 2
         p.getPos().y //+ p.getTextureDim().y / 2
     };
+    std::time_t now = std::time(nullptr);
+    if (now - last >= 1){
+        p.UpdateTexture();
+        last = std::time(nullptr);
+        for (Npc& i : Npcs)
+            i.UpdatePlayerPos(TruePos);
+    }
+    for (Npc& i : Npcs)
+        i.ChangeTexture();
+    
     for (Npc& i : Npcs){
-        i.UpdatePlayerPos(TruePos);
         i.UpdatePlayerSize(p.getTextureDim());
         if (i.CheckPlayerCollision()){
             p.TakeDamage(i.getDamage() * (i.getAI() == AIType::Ambush ? 1.5f : 1.0f));
@@ -133,7 +136,7 @@ void Game::SpawnEnemies(){
 
 std::vector<weaponStat> Game::ReadStats(){
     std::vector<weaponStat> V{};
-    std::ifstream FILE(ASSETS_PATH"WeaponStats.txt");
+    std::ifstream FILE(DATA_PATH"WeaponStats.txt");
     if (!FILE){
         std::cout << "ERROR: Failed to open WeaponStats.txt\n";
         return V;
@@ -169,7 +172,6 @@ std::vector<weaponStat> Game::ReadStats(){
         weaponStat WS(T, damage, speed, range, rechargeTime, price);
         V.push_back(WS);
     }
-    std::cout << "Read " << V.size() << " weapon stats\n";
     return V;
 }
 
@@ -237,6 +239,7 @@ void Game::manageButtons(){
             else if (u.getButton(0).getPrice() > p.getGold())
                 u.getButton(0).ToggleLock(); //this should lock it if the player doesn't have enough gold
             if (u.getButton(0).Input()){
+                PlaySound(Click);
                 w.LevelUp();
                 p.giveGold(-(u.getButton(0).getPrice()));
             }
@@ -257,6 +260,7 @@ void Game::manageButtons(){
             u.getButton(1).ToggleLock();
 
         if (u.getButton(1).Input()){
+            PlaySound(Click);
             p.giveXp(-(u.getButton(1).getPrice()));
             p.Evolve();
         }
@@ -275,31 +279,41 @@ void Game::manageButtons(){
         else if (u.getButton(2).getPrice() > p.getGold()){
             u.getButton(2).ToggleLock();
 
-            if (u.getButton(2).Input()&& p.getHealth() < 100.0f){
+            if (u.getButton(2).Input()&& p.getHealth() < p.getMaxHealth()){
+                PlaySound(Click);
                 MedkitPrice += 10;
                 p.giveGold(-(u.getButton(2).getPrice()));
                 p.Heal(15);
             }
         }
     }
-    else if (p.getEvolving()){ //I use the if cuz it might just have switched and I don't wanna do both. I have no idea if that actually changes anything, but I don't wanna find out. I just reaslised it changes nothing lol. Still leaving it cuz it changes nothing.
-        
-        for(int i = 0 ; i < p.getNext().size() ; ++i){ //Ok, this is gonna be intense, just focus Joseph, focus.
+    else if (p.getEvolving()){
+        int currentCount = p.getNext().size();
+        if (currentCount != lastEvoOptionCount){
+            for (int j = 0 ; j < 4 ; ++j)
+                evoUi.deleteButton(j);          // clear whatever was there before
+            for (int j = 0 ; j < currentCount ; ++j)
+                evoUi.newButton("EvoButton", false);
+            lastEvoOptionCount = currentCount;
+        }
+
+        for(int i = 0 ; i < p.getNext().size() ; ++i){
             if (evoUi.isNull(i))
                 continue;
-            evoUi.getButton(i).setText(std::format("Evolve into {}", SpeciesToString(p.getNext()[i])));
+            evoUi.getButton(i).setText(SpeciesToString(p.getNext()[i]));
 
             if (evoUi.getButton(i).Input()){
+                PlaySound(Click);
                 p.Evolve(i);
                 if (p.getNext().empty()){
-                    for (int j = 0 ; j < 3 ; ++j)
+                    for (int j = 0 ; j < 4 ; ++j)
                         evoUi.deleteButton(j);
                     u.deleteButton(1);
                     p.StopEvol();
+                    lastEvoOptionCount = -1;      // reset for the next evolve cycle
                 }
                 break;
             }
-
             evoUi.getButton(i).setPrice(0);
         }
     }
@@ -307,7 +321,7 @@ void Game::manageButtons(){
 
 std::vector<EvoData> Game::ReadEvoData(){
     std::vector<EvoData> V{};
-    std::ifstream FILE(ASSETS_PATH"EvolutionStats.txt");
+    std::ifstream FILE(DATA_PATH"EvolutionStats.txt");
     if (!FILE){
         std::cout << "ERROR: Failed to open EvolutionStats.txt\n";
         return V;

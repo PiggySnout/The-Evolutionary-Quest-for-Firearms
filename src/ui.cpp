@@ -75,7 +75,13 @@ void ui::DrawButtons() const{
             100.0f
         };
         buttons[i]->setRec(rec);
+        if (player.getNext().size() <= i)
+            buttons[i]->setTexture(nullptr);
+        else
+            buttons[i]->setTexture(&SpeciesToTexture(player.getNext()[i]));
     }
+
+    
 }
 
 void ui::deleteButton(int i){

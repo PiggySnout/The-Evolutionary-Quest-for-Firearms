@@ -1,4 +1,4 @@
-Assets:
+Textures:
 
 
 Monkey Textures : ChickenTeddy on OpenGameArt.org
@@ -32,3 +32,11 @@ Fungi Textures : DustDFG on OpenGameArt.org
 
 
 All the other assets were drawn by me.
+
+
+
+Sounds:
+
+Click sound : Agaxl on freesound
+
+Gunshot sound : pgi on freesound

@@ -168,6 +168,8 @@ bool Weapon::SpawnBullet(Vector2 playerPos, Vector2 mousePos, std::vector<Bullet
 
     Bullet b(damage, range, playerPos, velocity, bulletTexture, angle); ///keep fixing this stuff
     Bullets.push_back(b);
+    PlaySound(WeaponToSound());
+
     if (--ammo == 0){
         isLoaded = false;
         return false;
@@ -211,4 +213,17 @@ int Weapon::getPrice() const{
 
 type Weapon::getType() const{
     return Type;
+}
+
+Sound Weapon::WeaponToSound() const{
+    switch (VWS[ak_number-1].T){
+        case type::AK_47:
+            return T.ak_sound;
+        case type::SlingShot:
+        case type::Bow:
+        case type::Crossbow:
+            return T.Swoosh;
+
+    }
+    return T.ak_sound;
 }

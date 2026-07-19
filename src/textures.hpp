@@ -146,6 +146,13 @@ struct Textures{
     
     Texture2D Shark_2_Death;
 
+    Sound Click;
+    Sound ak_sound;
+    Sound Game_Over;
+    Sound Gold;
+    Sound Evolve;
+    Sound Swoosh;
+
     
 
     Textures() : Single_Cell_1(LoadTexture(ASSETS_PATH"Single_Cell_1.png")),
@@ -251,7 +258,16 @@ struct Textures{
                  Mould_1_Death(LoadTexture(ASSETS_PATH"Mould_1_Death.png")),
                  Mould_2_Death(LoadTexture(ASSETS_PATH"Mould_2_Death.png")),
                  Shark_1_Death(LoadTexture(ASSETS_PATH"Shark_1_Death.png")),
-                 Shark_2_Death(LoadTexture(ASSETS_PATH"Shark_2_Death.png"))
+                 Shark_2_Death(LoadTexture(ASSETS_PATH"Shark_2_Death.png")),
+
+
+
+                 Click(LoadSound(SOUND_PATH"click.wav")),
+                 ak_sound(LoadSound(SOUND_PATH"ak_47.wav")),
+                 Game_Over(LoadSound(SOUND_PATH"Game_Over.mp3")),
+                 Gold(LoadSound(SOUND_PATH"Get_Gold.wav")),
+                 Evolve(LoadSound(SOUND_PATH"Evolve.wav")),
+                 Swoosh(LoadSound(SOUND_PATH"BowShot.wav"))
 
     {
     }
@@ -314,5 +330,59 @@ struct Textures{
         UnloadTexture(Mould_2);
         UnloadTexture(Shark_1);
         UnloadTexture(Shark_2);
+
+
+        UnloadTexture(Weed_1_Death);
+        UnloadTexture(Weed_2_Death);
+        UnloadTexture(Fish_1_Death);
+        UnloadTexture(Fish_2_Death);
+        UnloadTexture(Amphibian_1_Death);
+        UnloadTexture(Amphibian_2_Death);
+        UnloadTexture(Fungus_1_Death);
+        UnloadTexture(Fungus_2_Death);
+        UnloadTexture(Crocodile_1_Death);
+        UnloadTexture(Crocodile_2_Death);
+        UnloadTexture(Rat_1_Death);
+        UnloadTexture(Rat_2_Death);
+        UnloadTexture(Mushroom_1_Death);
+        UnloadTexture(Mushroom_2_Death);
+        UnloadTexture(Mycellium_1_Death);
+        UnloadTexture(Mycellium_2_Death);
+        UnloadTexture(Bird_1_Death);
+        UnloadTexture(Bird_2_Death);
+        UnloadTexture(Late_Dinosaur_1_Death);
+        UnloadTexture(Late_Dinosaur_2_Death);
+        UnloadTexture(Feline_1_Death);
+        UnloadTexture(Feline_2_Death);
+        UnloadTexture(Canine_1_Death);
+        UnloadTexture(Canine_2_Death);
+        UnloadTexture(Primate_1_Death);
+        UnloadTexture(Primate_2_Death);
+        UnloadTexture(Human_1_Death);
+        UnloadTexture(Human_2_Death);
+        UnloadTexture(Snake_1_Death);
+        UnloadTexture(Snake_2_Death);
+        UnloadTexture(Grass_1_Death);
+        UnloadTexture(Grass_2_Death);
+        UnloadTexture(Flower_1_Death);
+        UnloadTexture(Flower_2_Death);
+        UnloadTexture(Bush_1_Death);
+        UnloadTexture(Bush_2_Death);
+        UnloadTexture(Tree_1_Death);
+        UnloadTexture(Tree_2_Death);
+        UnloadTexture(Mould_1_Death);
+        UnloadTexture(Mould_2_Death);
+        UnloadTexture(Shark_1_Death);
+        UnloadTexture(Shark_2_Death);
+        
+
+
+
+        UnloadSound(Click);
+        UnloadSound(ak_sound);
+        UnloadSound(Game_Over);
+        UnloadSound(Gold);
+        UnloadSound(Evolve);
+        UnloadSound(Swoosh);
     }
 };
