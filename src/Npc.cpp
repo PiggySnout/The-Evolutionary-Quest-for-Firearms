@@ -19,10 +19,10 @@ Npc::Npc(Textures& T, Species S, Vector2 Pos, int hp, int gold, int xp, float sp
                                                         hp(hp),
                                                         timer(180),
                                                         CurrentT(false),
-                                                        Frame1(&T.Single_Cell_1),
-                                                        Frame2(&T.Single_Cell_2),
-                                                        DeathFrame1(&T.Single_Cell_1_Death),
-                                                        DeathFrame2(&T.Single_Cell_2_Death),
+                                                        Frame1(nullptr),
+                                                        Frame2(nullptr),
+                                                        DeathFrame1(nullptr),
+                                                        DeathFrame2(nullptr),
                                                         IsTakingDamageTimer(0),
                                                         goldDrops(gold),
                                                         xpDrops(xp),
@@ -41,6 +41,140 @@ Npc::Npc(Textures& T, Species S, Vector2 Pos, int hp, int gold, int xp, float sp
                                                         T(&T)
 
 {
+    switch (S){
+        case Species::Amphibian:
+            Frame1 = &T.Amphibian_1;
+            Frame2 = &T.Amphibian_2;
+            DeathFrame1 = &T.Amphibian_1_Death;
+            DeathFrame2 = &T.Amphibian_2_Death;
+            break;
+        case Species::Bird:
+            Frame1 = &T.Bird_1;
+            Frame2 = &T.Bird_2;
+            DeathFrame1 = &T.Bird_1_Death;
+            DeathFrame2 = &T.Bird_2_Death;
+            break;
+        case Species::Bush:
+            Frame1 = &T.Bush_1;
+            Frame2 = &T.Bush_2;
+            DeathFrame1 = &T.Bush_1_Death;
+            DeathFrame2 = &T.Bush_2_Death;
+            break;
+        case Species::Canine:
+            Frame1 = &T.Canine_1;
+            Frame2 = &T.Canine_2;
+            DeathFrame1 = &T.Canine_1_Death;
+            DeathFrame2 = &T.Canine_2_Death;
+            break;
+        case Species::Crocodile:
+            Frame1 = &T.Crocodile_1;
+            Frame2 = &T.Crocodile_2;
+            DeathFrame1 = &T.Crocodile_1_Death;
+            DeathFrame2 = &T.Crocodile_2_Death;
+            break;
+        case Species::Feline:
+            Frame1 = &T.Feline_1;
+            Frame2 = &T.Feline_2;
+            DeathFrame1 = &T.Feline_1_Death;
+            DeathFrame2 = &T.Feline_2_Death;
+            break;
+        case Species::Fish:
+            Frame1 = &T.Fish_1;
+            Frame2 = &T.Fish_2;
+            DeathFrame1 = &T.Fish_1_Death;
+            DeathFrame2 = &T.Fish_2_Death;
+            break;
+        case Species::Flower:
+            Frame1 = &T.Flower_1;
+            Frame2 = &T.Flower_2;
+            DeathFrame1 = &T.Flower_1_Death;
+            DeathFrame2 = &T.Flower_2_Death;
+            break;
+        case Species::Fungus:
+            Frame1 = &T.Fungus_1;
+            Frame2 = &T.Fungus_2;
+            DeathFrame1 = &T.Fungus_1_Death;
+            DeathFrame2 = &T.Fungus_2_Death;
+            break;
+        case Species::Grass:
+            Frame1 = &T.Grass_1;
+            Frame2 = &T.Grass_2;
+            DeathFrame1 = &T.Grass_1_Death;
+            DeathFrame2 = &T.Grass_2_Death;
+            break;
+        case Species::Human:
+            Frame1 = &T.Human_1;
+            Frame2 = &T.Human_2;
+            DeathFrame1 = &T.Human_1_Death;
+            DeathFrame2 = &T.Human_2_Death;
+            break;
+        case Species::Late_Dinosaur:
+            Frame1 = &T.Late_Dinosaur_1;
+            Frame2 = &T.Late_Dinosaur_2;
+            DeathFrame1 = &T.Late_Dinosaur_1_Death;
+            DeathFrame2 = &T.Late_Dinosaur_2_Death;
+            break;
+        case Species::Mold:
+            Frame1 = &T.Mould_1;
+            Frame2 = &T.Mould_2;
+            DeathFrame1 = &T.Mould_1_Death;
+            DeathFrame2 = &T.Mould_2_Death;
+            break;
+        case Species::Mushroom:
+            Frame1 = &T.Mushroom_1;
+            Frame2 = &T.Mushroom_2;
+            DeathFrame1 = &T.Mushroom_1_Death;
+            DeathFrame2 = &T.Mushroom_2_Death;
+            break;
+        case Species::Mycellium:
+            Frame1 = &T.Mycellium_1;
+            Frame2 = &T.Mycellium_2;
+            DeathFrame1 = &T.Mycellium_1_Death;
+            DeathFrame2 = &T.Mycellium_2_Death;
+            break;
+        case Species::Primate:
+            Frame1 = &T.Primate_1;
+            Frame2 = &T.Primate_2;
+            DeathFrame1 = &T.Primate_1_Death;
+            DeathFrame2 = &T.Primate_2_Death;
+            break;
+        case Species::Rat:
+            Frame1 = &T.Rat_1;
+            Frame2 = &T.Rat_2;
+            DeathFrame1 = &T.Rat_1_Death;
+            DeathFrame2 = &T.Rat_2_Death;
+            break;
+        case Species::Shark:
+            Frame1 = &T.Shark_1;
+            Frame2 = &T.Shark_2;
+            DeathFrame1 = &T.Shark_1_Death;
+            DeathFrame2 = &T.Shark_2_Death;
+            break;
+        case Species::Single_Cell:
+            Frame1 = &T.Single_Cell_1;
+            Frame2 = &T.Single_Cell_2;
+            DeathFrame1 = &T.Single_Cell_1_Death;
+            DeathFrame2 = &T.Single_Cell_2_Death;
+            break;
+        case Species::Snake:
+            Frame1 = &T.Snake_1;
+            Frame2 = &T.Snake_2;
+            DeathFrame1 = &T.Snake_1_Death;
+            DeathFrame2 = &T.Snake_2_Death;
+            break;
+        case Species::Tree:
+            Frame1 = &T.Tree_1;
+            Frame2 = &T.Tree_2;
+            DeathFrame1 = &T.Tree_1_Death;
+            DeathFrame2 = &T.Tree_2_Death;
+            break;
+        case Species::Weed:
+            Frame1 = &T.Weed_1;
+            Frame2 = &T.Weed_2;
+            DeathFrame1 = &T.Weed_1_Death;
+            DeathFrame2 = &T.Weed_2_Death;
+            break;
+    }
 }
 int Npc::getHp() const{
     return hp;
