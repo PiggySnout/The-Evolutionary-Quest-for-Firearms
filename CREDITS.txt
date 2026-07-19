@@ -15,7 +15,7 @@ Bird Textures : tbbk on OpenGameArt.org
 
 Rat Textures : allen yatsura on OpenGameArt.org
 
-Cat Texture (happy, the unhappy one was modified by me) : scofanogd on OpenGameArt.org
+Cat Textures : scofanogd on OpenGameArt.org
 
 AK-47 Texture : DAV970 on Itch.io
 
@@ -40,3 +40,6 @@ Sounds:
 Click sound : Agaxl on freesound
 
 Gunshot sound : pgi on freesound
+
+Stone sound : Clunking Large Stones Together 1.wav by F.M.Audio -- https://freesound.org/s/570532/ -- License: Attribution 4.0
+

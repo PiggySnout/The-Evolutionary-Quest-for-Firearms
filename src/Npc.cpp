@@ -37,7 +37,8 @@ Npc::Npc(Textures& T, Species S, Vector2 Pos, int hp, int gold, int xp, float sp
                                                         max_hp(hp),
                                                         TextureTimer(std::time(nullptr)),
                                                         facingRight(true),
-                                                        Npcs(Npcs)
+                                                        Npcs(Npcs),
+                                                        T(&T)
 
 {
 }
@@ -53,6 +54,7 @@ int Npc::getXpDrops() const{
 
 void Npc::TakeDamage(int damage){
     hp -= damage;
+    PlaySound(T->Ping);
     if (hp > 0)
         IsTakingDamageTimer = 30;
     else

@@ -133,6 +133,7 @@ void Player::TakeDamage(float damage){
     if (damageTimer <= 0){
         hp -= damage;
         damageTimer = 30;
+        PlaySound(T.Damage);
     }
 }
 

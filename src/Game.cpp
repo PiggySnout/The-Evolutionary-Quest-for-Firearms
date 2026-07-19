@@ -141,7 +141,8 @@ void Game::SpawnEnemies(){
 
         AIType A = static_cast<AIType>(GetRandomValue(0, 4));
 
-        Npc N(T, Species::Single_Cell, NpcPos, 5, 10, 5, 0.9f, 1.0f, A, &Npcs);
+        Npc N(T, Levels[level].getNpctype(), NpcPos, p.findInEvoStats(Levels[level].getNpctype(), Levels[level].getNpc_evo_level() - 1).health / 10, Levels[level].getNpcGoldDrop(), Levels[level].getNpcXpDrop(), p.findInEvoStats(Levels[level].getNpctype(), Levels[level].getNpc_evo_level() - 1).speed * 0.8f, 1.0f, A, &Npcs);
+        
         Npcs.push_back(N);
     }
 }
@@ -287,15 +288,14 @@ void Game::manageButtons(){
                 u.getButton(2).ToggleLock();
         }
         else if (u.getButton(2).getPrice() > p.getGold()){
-            u.getButton(2).ToggleLock();
-
-            if (u.getButton(2).Input()&& p.getHealth() < p.getMaxHealth()){
+            u.getButton(2).ToggleLock();    
+        }
+        if (u.getButton(2).Input() && p.getHealth() < p.getMaxHealth()){
                 PlaySound(Click);
                 MedkitPrice += 10;
                 p.giveGold(-(u.getButton(2).getPrice()));
                 p.Heal(15);
             }
-        }
     }
     else if (p.getEvolving()){
         int currentCount = p.getNext().size();
@@ -331,7 +331,10 @@ void Game::manageButtons(){
 std::vector<EvoData> Game::ReadEvoData(){
     std::vector<EvoData> V{};
     std::ifstream FILE(DATA_PATH"EvolutionStats.txt");
-    assert(FILE);  
+    if (!FILE){
+        std::cout << "ERROR: Failed to open EvolutionStats.txt\n";
+        return V;
+    }  
     std::string Str;
     
     Species S;
@@ -452,11 +455,14 @@ std::vector<Level> Game::ReadLevels(){
     int Mob_cap;
     int MinGold, MaxGold;
     int MinXp, MaxXp;
-
+    int evo_level;
     std::ifstream FILE(DATA_PATH"LevelData.txt");
-    assert(FILE);
+    if (!FILE){
+        std::cout << "ERROR: Failed to open WeaponStats.txt\n";
+        return V;
+    } 
     
-    while(FILE>>Str>>Mob_cap>>MinGold>>MaxGold>>MinXp>>MaxXp){
+    while(FILE>>Str>>Mob_cap>>MinGold>>MaxGold>>MinXp>>MaxXp>>evo_level){
         if (Str == "Amphibian")
             S = Species::Amphibian;
         else if (Str == "Bird")
@@ -505,7 +511,7 @@ std::vector<Level> Game::ReadLevels(){
             std::cout << "ERROR: Invalid species in LevelData.txt\n";
             continue;
         }
-        Level L (S, Mob_cap, MinGold, MaxGold, MinXp, MaxXp);
+        Level L (S, Mob_cap, MinGold, MaxGold, MinXp, MaxXp, evo_level);
         V.push_back(L);
     }
 

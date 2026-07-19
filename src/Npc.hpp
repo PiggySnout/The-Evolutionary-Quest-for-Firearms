@@ -60,6 +60,7 @@ private:
     Family F;
     
     std::vector<Npc>* Npcs;
+    Textures* T;
     const Texture2D* Frame1;
     const Texture2D* Frame2;
     const Texture2D* DeathFrame1;

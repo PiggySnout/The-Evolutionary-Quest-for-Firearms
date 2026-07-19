@@ -152,6 +152,10 @@ struct Textures{
     Sound Gold;
     Sound Evolve;
     Sound Swoosh;
+    Sound Rock_s;
+    Sound Knife_s;
+    Sound Damage;
+    Sound Ping;
 
     
 
@@ -267,7 +271,11 @@ struct Textures{
                  Game_Over(LoadSound(SOUND_PATH"Game_Over.mp3")),
                  Gold(LoadSound(SOUND_PATH"Get_Gold.wav")),
                  Evolve(LoadSound(SOUND_PATH"Evolve.wav")),
-                 Swoosh(LoadSound(SOUND_PATH"BowShot.wav"))
+                 Swoosh(LoadSound(SOUND_PATH"BowShot.wav")),
+                 Rock_s(LoadSound(SOUND_PATH"Rock.wav")),
+                 Knife_s(LoadSound(SOUND_PATH"Knife.wav")),
+                 Damage(LoadSound(SOUND_PATH"Damage.wav")),
+                 Ping(LoadSound(SOUND_PATH"Ping.wav"))
 
     {
     }
@@ -384,5 +392,9 @@ struct Textures{
         UnloadSound(Gold);
         UnloadSound(Evolve);
         UnloadSound(Swoosh);
+        UnloadSound(Rock_s);
+        UnloadSound(Knife_s);
+        UnloadSound(Damage);
+        UnloadSound(Ping);
     }
 };

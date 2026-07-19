@@ -223,6 +223,12 @@ Sound Weapon::WeaponToSound() const{
         case type::Bow:
         case type::Crossbow:
             return T.Swoosh;
+        case type::Knife:
+            return T.Knife_s;
+        case type::Rock:
+        case type::Sharp_Rock:
+            return T.Rock_s;
+
 
     }
     return T.ak_sound;
