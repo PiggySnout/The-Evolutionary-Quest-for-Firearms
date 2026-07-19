@@ -292,7 +292,7 @@ void Game::manageButtons(){
         }
         if (u.getButton(2).Input() && p.getHealth() < p.getMaxHealth()){
                 PlaySound(Click);
-                MedkitPrice += 10;
+                MedkitPrice += 5;
                 p.giveGold(-(u.getButton(2).getPrice()));
                 p.Heal(15);
             }
