@@ -315,6 +315,7 @@ void Game::manageButtons(){
             if (evoUi.getButton(i).Input()){
                 PlaySound(Click);
                 p.Evolve(i);
+                FindNextLevel();
                 if (p.getNext().empty()){
                     for (int j = 0 ; j < 4 ; ++j)
                         evoUi.deleteButton(j);
@@ -516,4 +517,10 @@ std::vector<Level> Game::ReadLevels(){
     }
 
     return V;
+}
+void Game::FindNextLevel(){
+    for (; level < Levels.size() ; ++level){
+        if (Levels[level].getNpctype() == p.getSpecies())
+            break;
+    }
 }

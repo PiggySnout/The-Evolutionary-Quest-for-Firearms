@@ -10,7 +10,7 @@ Player::Player(Textures& T, std::vector<EvoData>& EvoStats) :
     y(0),
     textureToUse(false),
     speed(EvoStats[0].speed),
-    xp(100000000),
+    xp(0),
     gold(0),
     hp(42.5f),
     max_hp(42.5f),

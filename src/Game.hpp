@@ -38,6 +38,8 @@ public:
 
     const char* SpeciesToString(Species S) const;
 
+    void FindNextLevel();
+
 private:
 
     int level;
