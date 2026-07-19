@@ -321,9 +321,6 @@ void Npc::HunterMove(){ //fast, aggro if it can see u
     else 
         aggroed = false;
 
-    if (speed != 0.9f)
-        speed = 0.9f;
-
     if (aggroed)
         Destination = {playerPos.x - 50, playerPos.y - 45};
     else if (Vector2Distance(Pos, Destination) < 5.0f){
@@ -344,11 +341,11 @@ void Npc::HunterMove(){ //fast, aggro if it can see u
     float dist = Vector2Length(toTarget);
 
     Vector2 move;
-    if (dist <= speed || dist < 0.001f) {
+    if (dist <= speed * 0.9f || dist < 0.001f) {
         // close enough — snap to it instead of overshooting
         move = toTarget;
     } else {
-        move = Vector2Scale(Vector2Normalize(toTarget), speed);
+        move = Vector2Scale(Vector2Normalize(toTarget), speed * 0.9f);
     }
     Pos = Vector2Add(Pos, move);
     if (move.x < 0 && facingRight && MoveTimer == -1)
@@ -361,9 +358,6 @@ void Npc::CowardMove(){ //very fast, runs away, if you are far away enough it fo
         return;
     if (Vector2Distance(playerPos, Pos) > 250 && aggroed)
         aggroed = false;
-
-    if (speed != 1.0f)
-        speed = 1.0f;
 
     if (aggroed)
         Destination = {playerPos.x - 50, playerPos.y - 45};
@@ -401,9 +395,6 @@ void Npc::PackMove(){ //aggroes all other Npcs within a certain radius
     if (Vector2Distance(playerPos, Pos) > 250 && aggroed)
         aggroed = false;
 
-    if (speed != 0.7f)
-        speed = 0.7f;
-
     if (aggroed){
         Destination = {playerPos.x - 50, playerPos.y - 45};
         for (Npc& i : *Npcs){
@@ -429,11 +420,11 @@ void Npc::PackMove(){ //aggroes all other Npcs within a certain radius
     float dist = Vector2Length(toTarget);
 
     Vector2 move;
-    if (dist <= speed || dist < 0.001f) {
+    if (dist <= speed * 0.7f || dist < 0.001f) {
         // close enough — snap to it instead of overshooting
         move = toTarget;
     } else {
-        move = Vector2Scale(Vector2Normalize(toTarget), speed);
+        move = Vector2Scale(Vector2Normalize(toTarget), speed * 0.7f);
     }
     Pos = Vector2Add(Pos, move);
     if (move.x < 0 && facingRight && MoveTimer == -1)
@@ -450,8 +441,6 @@ void Npc::TankMove(){ //slow, more hp
     if (Vector2Distance(playerPos, Pos) > 250)
         aggroed = false;
 
-    if (speed != 0.5f)
-        speed = 0.5f;
     
     if (hp == max_hp){
         max_hp *= 2.0f;
@@ -476,11 +465,11 @@ void Npc::TankMove(){ //slow, more hp
     float dist = Vector2Length(toTarget);
 
     Vector2 move;
-    if (dist <= speed || dist < 0.001f) {
+    if (dist <= speed/2 || dist < 0.001f) {
         // close enough — snap to it instead of overshooting
         move = toTarget;
     } else {
-        move = Vector2Scale(Vector2Normalize(toTarget), speed);
+        move = Vector2Scale(Vector2Normalize(toTarget), speed/2);
     }
     Pos = Vector2Add(Pos, move);
     if (move.x < 0 && facingRight && MoveTimer == -1)
@@ -495,10 +484,6 @@ void Npc::AmbushMove(){
         aggroed = true;
     else if (Vector2Distance(playerPos, Pos) > 250)
         aggroed = false;
-
-    if (speed != 0.7f)
-        speed = 0.7f;
-    
 
     
     if (aggroed)
@@ -519,11 +504,11 @@ void Npc::AmbushMove(){
     float dist = Vector2Length(toTarget);
 
     Vector2 move;
-    if (dist <= speed || dist < 0.001f) {
+    if (dist <= speed * 0.7f || dist < 0.001f) {
         // close enough — snap to it instead of overshooting
         move = toTarget;
     } else {
-        move = Vector2Scale(Vector2Normalize(toTarget), speed);
+        move = Vector2Scale(Vector2Normalize(toTarget), speed * 0.7f);
     }
     Pos = Vector2Add(Pos, move);
 
