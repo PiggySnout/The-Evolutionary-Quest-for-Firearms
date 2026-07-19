@@ -10,8 +10,9 @@
 #include "WeaponData.hpp"
 #include "Npc.hpp"
 #include "EvoData.hpp"
+#include "Level.hpp"
 
-#define mob_cap 10
+
 
 class Game{
 public:
@@ -25,6 +26,7 @@ public:
 
     std::vector<weaponStat> ReadStats();
     std::vector<EvoData> ReadEvoData();
+    std::vector<Level> ReadLevels();
 
     void LevelUp();
 
@@ -41,12 +43,13 @@ private:
     int level;
     int timer;
     int MedkitPrice;
-
+    std::vector<Level> Levels;
     int lastEvoOptionCount;
-
     bool paused;
+    int mob_cap;
     std::vector<weaponStat> WeaponStats;
     std::vector<EvoData> EvoStats;
+
     Textures T;
     Player p;
     Weapon w;

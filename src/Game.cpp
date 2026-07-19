@@ -4,6 +4,7 @@
 #include <format>
 #include <algorithm>
 #include "Species.hpp"
+#include <cassert>
 Game::Game() : level(0),
                last(std::time(nullptr)),
                p(T, EvoStats),
@@ -17,7 +18,9 @@ Game::Game() : level(0),
                evoUi(p, w, WeaponStats, T, false, true),
                Click(T.Click),
                lastEvoOptionCount(-1),
-               paused(false)
+               paused(false),
+               Levels(ReadLevels()),
+               mob_cap(Levels[level].getMob_cap())
                
                
 {
@@ -207,12 +210,6 @@ void Game::killNpcs(){
     }
     std::sort(npcsToDespawn.rbegin(), npcsToDespawn.rend());
     for (int i : npcsToDespawn){
-        std::cout
-    << "Player: (" << p.getPos().x << ", " << p.getPos().y << ")\n"
-    << "NPC:    (" << Npcs[i].getPos().x << ", " << Npcs[i].getPos().y << ")\n"
-    << "Dist:   "
-    << Vector2Distance(p.getPos(), Npcs[i].getPos())
-    << '\n';
         std::swap(Npcs[i], Npcs[Npcs.size()-1]);
         Npcs.pop_back();
     }
@@ -232,7 +229,6 @@ void Game::killBullets(){
 }
 
 void Game::manageButtons(){
-    std::cout << u.isNull(0) << u.isNull(1) << u.isNull(2) << '\n';
     if (!p.getEvolving()){
         if (w.getak_number() == 47)
             u.deleteButton(0);
@@ -335,10 +331,7 @@ void Game::manageButtons(){
 std::vector<EvoData> Game::ReadEvoData(){
     std::vector<EvoData> V{};
     std::ifstream FILE(DATA_PATH"EvolutionStats.txt");
-    if (!FILE){
-        std::cout << "ERROR: Failed to open EvolutionStats.txt\n";
-        return V;
-    }   
+    assert(FILE);  
     std::string Str;
     
     Species S;
@@ -449,4 +442,72 @@ const char* Game::SpeciesToString(Species S) const{
             return "Weed";
     }
     return "";
+}
+
+std::vector<Level> Game::ReadLevels(){
+    std::vector<Level> V{};
+
+    Species S;
+    std::string Str;
+    int Mob_cap;
+    int MinGold, MaxGold;
+    int MinXp, MaxXp;
+
+    std::ifstream FILE(DATA_PATH"LevelData.txt");
+    assert(FILE);
+    
+    while(FILE>>Str>>Mob_cap>>MinGold>>MaxGold>>MinXp>>MaxXp){
+        if (Str == "Amphibian")
+            S = Species::Amphibian;
+        else if (Str == "Bird")
+            S = Species::Bird;
+        else if (Str == "Bush")
+            S = Species::Bush;
+        else if (Str == "Canine")
+            S = Species::Canine;
+        else if (Str == "Crocodile")
+            S = Species::Crocodile;
+        else if (Str == "Feline")
+            S = Species::Feline;
+        else if (Str == "Fungus")
+            S = Species::Fungus;
+        else if (Str == "Fish")
+            S = Species::Fish;
+        else if (Str == "Flower")
+            S = Species::Flower;
+        else if (Str == "Grass")
+            S = Species::Grass;
+        else if (Str == "Mold")
+            S = Species::Mold;
+        else if (Str == "Mushroom")
+            S = Species::Mushroom;
+        else if (Str == "Mycellium")
+            S = Species::Mycellium;
+        else if (Str == "Primate")
+            S = Species::Primate;
+        else if (Str == "Shark")
+            S = Species::Shark;
+        else if (Str == "Single_Cell")
+            S = Species::Single_Cell;
+        else if (Str == "Snake")
+            S = Species::Snake;
+        else if (Str == "Tree")
+            S = Species::Tree;
+        else if (Str == "Weed")
+            S = Species::Weed;
+        else if (Str == "Rat")
+            S = Species::Rat;
+        else if (Str == "Dinosaur" || Str == "Late_Dinosaur")
+            S = Species::Late_Dinosaur;
+        else if (Str == "Human")
+            S = Species::Human;
+        else{
+            std::cout << "ERROR: Invalid species in LevelData.txt\n";
+            continue;
+        }
+        Level L (S, Mob_cap, MinGold, MaxGold, MinXp, MaxXp);
+        V.push_back(L);
+    }
+
+    return V;
 }
