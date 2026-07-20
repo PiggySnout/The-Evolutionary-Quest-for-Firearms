@@ -9,3 +9,4 @@
 *.gltf binary
 
 libs/raylib/** linguist-vendored
+build-web/** linguist-vendored
