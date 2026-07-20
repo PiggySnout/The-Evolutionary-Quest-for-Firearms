@@ -167,6 +167,8 @@ std::vector<weaponStat> Game::ReadStats(){
         std::cout << "ERROR: Failed to open WeaponStats.txt\n";
         return V;
     }   
+    else 
+        TraceLog(LOG_INFO, "IT WORKED");
     std::string Type;
     int damage, range, rechargeTime, price;
     float speed;
@@ -354,6 +356,8 @@ std::vector<EvoData> Game::ReadEvoData(){
         std::cout << "ERROR: Failed to open EvolutionStats.txt\n";
         return V;
     }  
+    else 
+        TraceLog(LOG_INFO, "IT WORKED");
     std::string Str;
     
     Species S;
@@ -475,11 +479,14 @@ std::vector<Level> Game::ReadLevels(){
     int MinGold, MaxGold;
     int MinXp, MaxXp;
     int evo_level;
+    TraceLog(LOG_INFO, "Trying to open: %s", GetDataPath("LevelData.txt").c_str());
     std::ifstream FILE(GetDataPath("LevelData.txt"));
     if (!FILE){
         std::cout << "ERROR: Failed to open LevelData.txt\n";
         return V;
     } 
+    else 
+        TraceLog(LOG_INFO, "IT WORKED");
     
     while(FILE>>Str>>Mob_cap>>MinGold>>MaxGold>>MinXp>>MaxXp>>evo_level){
         if (Str == "Amphibian")

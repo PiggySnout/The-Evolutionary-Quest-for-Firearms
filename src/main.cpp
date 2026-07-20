@@ -7,7 +7,7 @@
 int main() 
 {   
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(900, 600, "The Evolutionary Quest for firearms");
+    InitWindow(900, 600, "The Evolutionary Quest for firearms"); 
     
     SetTargetFPS(60);
     
@@ -32,6 +32,7 @@ int main()
         InitAudioDevice();
         SetExitKey(KEY_NULL);
     }
+    
     Game g;
     
 

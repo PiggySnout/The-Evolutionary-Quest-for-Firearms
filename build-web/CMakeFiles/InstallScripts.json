@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/josep/Desktop/Programming/Game Jam/build-web/cmake_install.cmake",
+		"C:/Users/josep/Desktop/Programming/Game Jam/build-web/libs/raylib/cmake_install.cmake",
+		"C:/Users/josep/Desktop/Programming/Game Jam/build-web/libs/raylib/raylib/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
